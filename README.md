@@ -19,3 +19,12 @@ But above all, it's free! So why not try to go on the time machine with us to tr
 your childhood once again?
 
 low_
+
+User stories:
+Stage 1:
+- As a user, I want to be able to initiate the game.
+- As a user, I want to start the game with default ship position on 5x5 fields.
+- As a user, I want to see my previous moves during the game.
+- As a user, I want the game to end after human or comp wins the game.
+- As a user, I want to store game history after the game. 
+- In Game History, I want to see movements and position of my ships in previous games.
