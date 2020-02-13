@@ -11,12 +11,14 @@ public class Ship {
     private boolean isHorizontal;
     private int startingX;
     private int startingY;
+    private boolean destroyed;
 
     public Ship(int s, boolean h, int x, int y) {
         size = s;
         isHorizontal = h;
         startingX = x;
         startingY = y;
+        destroyed = false;
     }
 
     // EFFECTS: returns true if a bullet fire at (x, y) would damage this ship
@@ -51,6 +53,7 @@ public class Ship {
         return ret;
     }
 
+    // EFFECTS: return conflict between this and the other ship
     public boolean conflict(Ship other) {
         List<Pair<Integer, Integer>> otherCells = other.allCells();
         for (Pair<Integer, Integer> p: otherCells) {
@@ -59,6 +62,14 @@ public class Ship {
             }
         }
         return false;
+    }
+
+    public void setDestroyed(boolean destroyed1) {
+        destroyed = destroyed1;
+    }
+
+    public boolean isDestroyed() {
+        return destroyed;
     }
 
     public int getSize() {
