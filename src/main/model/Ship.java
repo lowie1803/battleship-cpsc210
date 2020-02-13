@@ -80,11 +80,4 @@ public class Ship {
         return isHorizontal;
     }
 
-    public int getStartingX() {
-        return startingX;
-    }
-
-    public int getStartingY() {
-        return startingY;
-    }
 }

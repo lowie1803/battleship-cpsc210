@@ -81,4 +81,20 @@ public class ShipTest {
         other = new Ship(normalSize - 2, false, 1, 4);
         assertFalse(ship.conflict(other));
     }
+
+    @Test
+    void testDestroyShip() {
+        ship = new Ship(normalSize, true, 3, 4);
+        assertFalse(ship.isDestroyed());
+        ship.setDestroyed(true);
+        assertTrue(ship.isDestroyed());
+    }
+
+    @Test
+    void testGetterFunc() {
+        ship = new Ship(normalSize, true, 3, 4);
+        assertEquals(ship.getSize(), normalSize);
+        assertTrue(ship.horizontal());
+
+    }
 }
