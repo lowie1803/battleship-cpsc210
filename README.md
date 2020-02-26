@@ -27,5 +27,9 @@ Stage 1:
 - As a user, I want to start the game with default ship position on 8x8 fields.
 - As a user, I want to attack the opponent during the game.
 - As a user, I want to see the current status of the game.
-- As a user, I want to add my move and the opponent latest move into a list of moves so I can easily keep track of it.
-- As a user, I want the game to end after any player wins the game. 
+- As a user, I want to add the ships to the game.
+- As a user, I want the game to end after any player wins the game.
+
+Stage 2:
+- As a user, I want to save the current game.
+- As a user, I want to keep the results of past games. 

@@ -83,22 +83,22 @@ public class Player {
         return true;
     }
 
-    //EFFECTS: output how the board for this player looks like
-    public void printBoard() {
-        for (int i = 1; i <= gridSize; i++) {
-            for (int j = 1; j <= gridSize; j++) {
-                int s = 0;
-                for (Ship ship: ships) {
-                    if (ship.hit(j, i)) {
-                        s = ship.getSize();
-                    }
-                }
-                System.out.print(s);
-            }
-            System.out.println();
-        }
-        System.out.println();
-    }
+//    //EFFECTS: output how the board for this player looks like
+//    public void printBoard() {
+//        for (int i = 1; i <= gridSize; i++) {
+//            for (int j = 1; j <= gridSize; j++) {
+//                int s = 0;
+//                for (Ship ship: ships) {
+//                    if (ship.hit(j, i)) {
+//                        s = ship.getSize();
+//                    }
+//                }
+//                System.out.print(s);
+//            }
+//            System.out.println();
+//        }
+//        System.out.println();
+//    }
 
     public Pair<Integer, Integer> latestMove() {
         return moves.get(moves.size() - 1);

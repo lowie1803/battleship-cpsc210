@@ -1,5 +1,6 @@
 package model;
 
+import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -86,5 +87,14 @@ public class PlayerTest {
         //points check
         assertEquals(player[0].getPoints(), 12);
         assertEquals(player[1].getPoints(), 8);
+
+        //finalize the game
+        assertFalse(player[1].lostGame());
+        assertEquals(player[0].attack(player[1], 4, 6), 8);
+        assertTrue(player[1].lostGame());
+
+        //misc
+        assertEquals(player[0].latestMove(), new Pair<>(4, 6));
+        assertEquals(player[0].getGridSize(), 8);
     }
 }
