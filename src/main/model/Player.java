@@ -1,17 +1,19 @@
 package model;
 
 import javafx.util.Pair;
+import persistence.Reader;
+import persistence.Saveable;
 import settings.Settings;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player {
+public class Player implements Saveable {
     private int gridSize;
     private List<Ship> ships;
     private int points;
     private List<Pair<Integer, Integer>> moves;
-//    private boolean lost;
 
     public Player() {
         gridSize = Settings.DEFAULT_GRID_SIZE;
@@ -54,7 +56,7 @@ public class Player {
 
         int ret = other.concede(x, y);
         points += ret;
-        moves.add(new Pair<>(x, y));
+        addMove(x, y);
         return ret;
     }
 
@@ -83,32 +85,55 @@ public class Player {
         return true;
     }
 
-//    //EFFECTS: output how the board for this player looks like
-//    public void printBoard() {
-//        for (int i = 1; i <= gridSize; i++) {
-//            for (int j = 1; j <= gridSize; j++) {
-//                int s = 0;
-//                for (Ship ship: ships) {
-//                    if (ship.hit(j, i)) {
-//                        s = ship.getSize();
-//                    }
-//                }
-//                System.out.print(s);
-//            }
-//            System.out.println();
-//        }
-//        System.out.println();
-//    }
-
+    // EFFECTS: Returns the latest move of the player
     public Pair<Integer, Integer> latestMove() {
         return moves.get(moves.size() - 1);
     }
 
+    // EFFECTS: Returns the size of the grid
     public int getGridSize() {
         return gridSize;
     }
 
     public int getPoints() {
         return points;
+    }
+
+    public int getMoveCount() {
+        return moves.size();
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public void setGridSize(int gridSize) {
+        this.gridSize = gridSize;
+    }
+
+    public void addMove(int x, int y) {
+        moves.add(new Pair<>(x, y));
+    }
+
+    @Override
+    public void save(PrintWriter printWriter) {
+        printWriter.print(gridSize);
+        printWriter.print(Reader.DELIMITER);
+        printWriter.print(points);
+        printWriter.print(Reader.DELIMITER);
+        printWriter.print(ships.size());
+        printWriter.print(Reader.DELIMITER);
+        for (Ship ship: ships) {
+            ship.save(printWriter);
+        }
+        printWriter.print(moves.size());
+        printWriter.print(Reader.DELIMITER);
+        for (Pair i: moves) {
+            printWriter.print(i.getKey());
+            printWriter.print(Reader.DELIMITER);
+            printWriter.print(i.getValue());
+            printWriter.print(Reader.DELIMITER);
+        }
+        printWriter.println();
     }
 }

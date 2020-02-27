@@ -1,15 +1,19 @@
 package ui;
 
 import model.Player;
+import persistence.Reader;
+import persistence.Saveable;
+import persistence.Writer;
 import settings.Settings;
 import model.Ship;
 
-import java.util.Random;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class BattleShipApp {
-    private Scanner input;
+    private Scanner input = new Scanner(System.in);
     private Player[] player = {new Player(), new Player()};
+    private int turnCount = 0;
 
     public BattleShipApp() {
         runApp();
@@ -17,16 +21,49 @@ public class BattleShipApp {
 
     private void runApp() {
         String command;
-        input = new Scanner(System.in);
+        Set<String> legalCommand = new HashSet<>();
+        legalCommand.add("s");
+        legalCommand.add("q");
+
+        File loadGame = new File(Settings.SAVED_GAMES_DATA);
 
         while (true) {
-            System.out.println("Enter s to start new game, q to quit: ");
-            command = input.next();
+            if (loadGame.length() == 0) {
+                command = commandGetter("Enter s to start new game, q to quit: ", legalCommand);
+            } else {
+                legalCommand.add("l");
+                command = commandGetter("Enter s to start new game, q to quit, l to load game: ", legalCommand);
+                legalCommand.remove("l");
+            }
             if (command.equals("s")) {
                 initialGame();
+            } else if (command.equals("l")) {
+                loadGame();
             } else if (command.equals("q")) {
                 break;
             }
+        }
+    }
+
+    private String commandGetter(String description, Set<String> legalCommand) {
+        System.out.println(description);
+        String cmd;
+        cmd = input.next();
+        while (!legalCommand.contains(cmd)) {
+            System.out.println("Wrong command! Please retype: ");
+            System.out.println(description);
+            cmd = input.next();
+        }
+        return cmd;
+    }
+
+    private void loadGame() {
+        try {
+            player = Reader.readPlayers(new File(Settings.SAVED_GAMES_DATA));
+            turnCount = player[0].getMoveCount() + player[1].getMoveCount();
+            runGame();
+        } catch (IOException e) {
+            System.out.println("Error: no saved games.");
         }
     }
 
@@ -44,41 +81,48 @@ public class BattleShipApp {
         randomShip(player[1], Settings.DEFAULT_SHIP2_SIZE);
         randomShip(player[1], Settings.DEFAULT_SHIP3_SIZE);
 
-//        player[0].printBoard();
-//        player[1].printBoard();
-
         runGame();
     }
 
     // MODIFIES: this
     // EFFECTS: letting player and comp take turns to play the game
     private void runGame() {
-        int turnCount = 0;
         while (!player[0].lostGame() && !player[1].lostGame()) {
             if (turnCount % 2 == 0) {
-                System.out.println("Type a to attack, or s to view current score...");
-                String command = input.next();
-
-                while (!command.equals("a") && !command.equals("s")) {
-                    System.out.println("Wrong command! Please retype... (a/s)");
-                    command = input.next();
-                }
-
+                Set<String> legalCommand = new HashSet<>();
+                legalCommand.add("a");
+                legalCommand.add("s");
+                legalCommand.add("q");
+                String command = commandGetter(
+                        "Type a to attack, or s to view current score, or q to quit and save...", legalCommand);
                 if (command.equals("a")) {
                     makeInputtedAttack(player[0], player[1]);
-                } else {
-                    System.out.println("Current score: " + player[0].getPoints()
-                            + " " + player[1].getPoints());
+                } else if (command.equals("s")) {
+                    System.out.println("Current score: " + player[0].getPoints() + " " + player[1].getPoints());
                     turnCount--; // since player haven't make a turn yet
+                } else {
+                    saveGameToFile();
+                    return;
                 }
-
             } else {
                 makeRandomAttack(player[1], player[0]);
             }
             turnCount++;
         }
-
         concludeGame();
+    }
+
+    private void saveGameToFile() {
+        try {
+            Writer writer = new Writer(new File(Settings.SAVED_GAMES_DATA));
+            writer.write(player[0]);
+            writer.write(player[1]);
+            writer.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to save game... Game deleted!");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     private void concludeGame() {
@@ -88,6 +132,20 @@ public class BattleShipApp {
             System.out.println("You won!");
         }
         System.out.println("The score is " + player[0].getPoints() + " - " + player[1].getPoints() + "\n\n");
+
+        clearSavedGame();
+    }
+
+    private void clearSavedGame() {
+        Writer writer = null;
+        try {
+            writer = new Writer(new File(Settings.SAVED_GAMES_DATA));
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -169,4 +227,6 @@ public class BattleShipApp {
             y = rand.nextInt(p.getGridSize()) + 1;
         }
     }
+
+
 }

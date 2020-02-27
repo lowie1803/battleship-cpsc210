@@ -2,11 +2,14 @@ package model;
 
 
 import javafx.util.Pair;
+import persistence.Reader;
+import persistence.Saveable;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Ship {
+public class Ship implements Saveable {
     private int size;
     private boolean isHorizontal;
     private int startingX;
@@ -80,4 +83,18 @@ public class Ship {
         return isHorizontal;
     }
 
+    @Override
+    public void save(PrintWriter printWriter) {
+        printWriter.print(size);
+        printWriter.print(Reader.DELIMITER);
+        printWriter.print(isHorizontal);
+        printWriter.print(Reader.DELIMITER);
+        printWriter.print(startingX);
+        printWriter.print(Reader.DELIMITER);
+        printWriter.print(startingY);
+        printWriter.print(Reader.DELIMITER);
+
+        printWriter.print(destroyed);
+        printWriter.print(Reader.DELIMITER);
+    }
 }
