@@ -1,7 +1,9 @@
 package persistence;
 
 import javafx.util.Pair;
+import model.HumanPlayer;
 import model.Player;
+import model.RandomizedBot;
 import model.Ship;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +24,7 @@ public class WriterTest {
     @BeforeEach
     void runBefore() throws FileNotFoundException, UnsupportedEncodingException {
         testWriter = new Writer(new File(TEST_FILE));
-        players = new Player[]{new Player(), new Player()};
+        players = new Player[]{new HumanPlayer(), new RandomizedBot()};
         assertTrue(players[0].addShip(new Ship(8, true, 1, 1)));
         assertTrue(players[0].addShip(new Ship(3, false, 5, 5)));
         assertTrue(players[0].addShip(new Ship(2, true, 6, 6)));

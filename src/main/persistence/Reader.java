@@ -1,6 +1,8 @@
 package persistence;
 
+import model.HumanPlayer;
 import model.Player;
+import model.RandomizedBot;
 import model.Ship;
 
 import java.io.File;
@@ -27,12 +29,13 @@ public class Reader {
     // EFFECTS: returns a list of accounts parsed from list of strings
     // where each string contains data for one account
     private static Player[] parseContent(List<String> fileContent) {
-        Player[] players = {new Player(), new Player()};
+        // TODO: customize this so that there are PvP mode and PvC mode
+        Player[] players = {new HumanPlayer(), new RandomizedBot()};
         ArrayList<String> lineComponents = splitString(fileContent.get(0));
-        players[0] = parsePlayer(lineComponents);
+        parsePlayer(lineComponents, players[0]);
 
         lineComponents = splitString(fileContent.get(1));
-        players[1] = parsePlayer(lineComponents);
+        parsePlayer(lineComponents, players[1]);
         return players;
     }
 
@@ -49,8 +52,7 @@ public class Reader {
     // - follows by 5*n strings, which is the infos of n ships
     // - follows by an int, which is the number of moves made. Let's set this to m
     // - follows by 2*m ints, denotes infos of m moves.
-    private static Player parsePlayer(List<String> components) {
-        Player player = new Player();
+    private static void parsePlayer(List<String> components, Player player) {
         player.setGridSize(Integer.parseInt(components.get(0)));
         player.setPoints(Integer.parseInt(components.get(1)));
         int shipCount = Integer.parseInt(components.get(2));
@@ -68,7 +70,7 @@ public class Reader {
                     Integer.parseInt(components.get(currentIndex + 1)));
             currentIndex += 2;
         }
-        return player;
+//        return player;
     }
 
     // REQUIRES: components has size 5, with first string is an int, follows by a boolean, then 2 ints, then a boolean

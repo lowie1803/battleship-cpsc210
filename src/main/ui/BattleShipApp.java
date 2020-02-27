@@ -1,9 +1,9 @@
 package ui;
 
+import model.HumanPlayer;
 import model.Player;
 import model.RandomizedBot;
 import persistence.Reader;
-import persistence.Saveable;
 import persistence.Writer;
 import settings.Settings;
 import model.Ship;
@@ -12,8 +12,9 @@ import java.io.*;
 import java.util.*;
 
 public class BattleShipApp {
+    private Settings settings = new Settings();
     private Scanner input = new Scanner(System.in);
-    private Player[] player = {new Player(), new RandomizedBot()};
+    private Player[] player = {new HumanPlayer(), new RandomizedBot()};
 
 
     public BattleShipApp() {
@@ -71,15 +72,13 @@ public class BattleShipApp {
     // EFFECTS: initiate a game, including letting players arrange the ships and randomize the arrangement for
     // the comp.
     private void initialGame() {
-        player[0] = new Player();
-        player[1] = new Player();
+        player[0] = new HumanPlayer();
+        player[1] = new RandomizedBot();
         getInputForShip(player[0], Settings.DEFAULT_SHIP1_SIZE);
         getInputForShip(player[0], Settings.DEFAULT_SHIP2_SIZE);
         getInputForShip(player[0], Settings.DEFAULT_SHIP3_SIZE);
 
-        randomShip(player[1], Settings.DEFAULT_SHIP1_SIZE);
-        randomShip(player[1], Settings.DEFAULT_SHIP2_SIZE);
-        randomShip(player[1], Settings.DEFAULT_SHIP3_SIZE);
+        player[1].generateAllShips(settings.defaultSizes);
 
         runGame();
     }
@@ -103,7 +102,7 @@ public class BattleShipApp {
                     return;
                 }
             } else {
-                makeRandomAttack(player[currentPlayer], player[lastPlayer]);
+                player[currentPlayer].makeAnAttack(player[lastPlayer]);
             }
         }
         concludeGame();
@@ -239,20 +238,4 @@ public class BattleShipApp {
             y = input.nextInt();
         }
     }
-
-    // MODIFIES: this
-    // EFFECTS: generate a random ship for comp
-    private void randomShip(Player p, int length) {
-        Random rand = new Random();
-        boolean isHorizontal = rand.nextBoolean();
-        int x = rand.nextInt(p.getGridSize()) + 1;
-        int y = rand.nextInt(p.getGridSize()) + 1;
-        while (!p.addShip(new Ship(length, isHorizontal, x, y))) {
-            isHorizontal = rand.nextBoolean();
-            x = rand.nextInt(p.getGridSize()) + 1;
-            y = rand.nextInt(p.getGridSize()) + 1;
-        }
-    }
-
-
 }

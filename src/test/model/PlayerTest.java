@@ -8,7 +8,7 @@ import settings.Settings;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest {
-    private Player[] player = {new Player(), new Player()};
+    private Player[] player = {new HumanPlayer(), new RandomizedBot()};
 
     @BeforeEach
     void runBefore() {
@@ -23,8 +23,8 @@ public class PlayerTest {
 
     @Test
     void testInitialize() {
-        player[0] = new Player();
-        player[1] = new Player();
+        player[0] = new HumanPlayer();
+        player[1] = new RandomizedBot();
 
         assertTrue(player[0].addShip(new Ship(8, true, 1, 1)));
         assertTrue(player[0].addShip(new Ship(2, true, 4, 2)));

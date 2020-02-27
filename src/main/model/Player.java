@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player implements Saveable {
+public abstract class Player implements Saveable {
     private int gridSize;
     private List<Ship> ships;
     private int points;
@@ -22,7 +22,10 @@ public class Player implements Saveable {
         moves = new ArrayList<>(0);
     }
 
-    public void makeAnAttack(Player opponent) {}
+    // Distinctive for bot and human
+    public abstract void makeAnAttack(Player opponent);
+
+    public abstract void generateAllShips(List<Integer> sizes);
 
     // MODIFIES: this
     // EFFECTS: add ship to the ship set
@@ -106,6 +109,11 @@ public class Player implements Saveable {
     // EFFECTS: returns the number of moves that this made
     public int getMoveCount() {
         return moves.size();
+    }
+
+    // EFFECTS: clear all the ships
+    public void clearShips() {
+        ships.clear();
     }
 
     // EFFECTS: modifiers uses for testing only
