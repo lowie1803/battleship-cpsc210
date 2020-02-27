@@ -1,6 +1,7 @@
 package ui;
 
 import model.Player;
+import model.RandomizedBot;
 import persistence.Reader;
 import persistence.Saveable;
 import persistence.Writer;
@@ -12,8 +13,8 @@ import java.util.*;
 
 public class BattleShipApp {
     private Scanner input = new Scanner(System.in);
-    private Player[] player = {new Player(), new Player()};
-    private int turnCount = 0;
+    private Player[] player = {new Player(), new RandomizedBot()};
+
 
     public BattleShipApp() {
         runApp();
@@ -60,7 +61,6 @@ public class BattleShipApp {
     private void loadGame() {
         try {
             player = Reader.readPlayers(new File(Settings.SAVED_GAMES_DATA));
-            turnCount = player[0].getMoveCount() + player[1].getMoveCount();
             runGame();
         } catch (IOException e) {
             System.out.println("Error: no saved games.");
@@ -88,28 +88,57 @@ public class BattleShipApp {
     // EFFECTS: letting player and comp take turns to play the game
     private void runGame() {
         while (!player[0].lostGame() && !player[1].lostGame()) {
-            if (turnCount % 2 == 0) {
-                Set<String> legalCommand = new HashSet<>();
-                legalCommand.add("a");
-                legalCommand.add("s");
-                legalCommand.add("q");
-                String command = stringCommandGetter(
-                        "Type a to attack, or s to view current score, or q to quit and save...", legalCommand);
-                if (command.equals("a")) {
-                    makeInputtedAttack(player[0], player[1]);
-                } else if (command.equals("s")) {
-                    System.out.println("Current score: " + player[0].getPoints() + " " + player[1].getPoints());
-                    turnCount--; // since player haven't make a turn yet
-                } else {
-                    saveGameToFile();
+
+            int currentPlayer = turnCount() % 2;
+            int lastPlayer = (currentPlayer ^ 1);
+//            System.out.println(turnCount() + " " + currentPlayer + " " + lastPlayer);
+            if (turnCount() > 0) {
+                lastMoveAnnouncer(player[lastPlayer], lastPlayer + 1);
+            } else {
+                beginAnnouncer();
+            }
+            if (currentPlayer == 0) { // not a human player
+                boolean quit = inGameMenu();
+                if (quit) {
                     return;
                 }
             } else {
-                makeRandomAttack(player[1], player[0]);
+                makeRandomAttack(player[currentPlayer], player[lastPlayer]);
             }
-            turnCount++;
         }
         concludeGame();
+    }
+
+    private int turnCount() {
+        return player[0].getMoveCount() + player[1].getMoveCount();
+    }
+
+    private void beginAnnouncer() {
+        System.out.println("GAME BEGINS!");
+    }
+
+    // EFFECTS: return true if chose to quit & save
+    private boolean inGameMenu() {
+        Set<String> legalCommand = new HashSet<>();
+        legalCommand.add("a");
+        legalCommand.add("s");
+        legalCommand.add("q");
+        String command = stringCommandGetter(
+                "Type a to attack, or s to view current score, or q to quit and save...", legalCommand);
+        if (command.equals("a")) {
+            makeInputtedAttack(player[0], player[1]);
+        } else if (command.equals("s")) {
+            System.out.println("Current score: " + player[0].getPoints() + " " + player[1].getPoints());
+        } else {
+            saveGameToFile();
+            return true;
+        }
+        return false;
+    }
+
+    private void lastMoveAnnouncer(Player p, int index) {
+        System.out.println("Player " + index + " make move: "
+                + p.latestMove().getKey() + " " + p.latestMove().getValue());
     }
 
     private void saveGameToFile() {
@@ -160,8 +189,6 @@ public class BattleShipApp {
             x = rand.nextInt(defense.getGridSize()) + 1;
             y = rand.nextInt(defense.getGridSize()) + 1;
         }
-        System.out.println("Your opponent chose to attack in " + x + " " + y);
-        System.out.println();
     }
 
     // MODIFIES: this

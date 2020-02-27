@@ -22,6 +22,8 @@ public class Player implements Saveable {
         moves = new ArrayList<>(0);
     }
 
+    public void makeAnAttack(Player opponent) {}
+
     // MODIFIES: this
     // EFFECTS: add ship to the ship set
     public boolean addShip(Ship ship) {
@@ -45,6 +47,7 @@ public class Player implements Saveable {
     // EFFECTS: attack, destroy, and gain point if this has destroy a ship from other player.
     //          return -1 if this move is ineligible, >=0 as the number of point gained.
     public int attack(Player other, int x, int y) {
+//        System.out.println("Try attack " + x + " " + y);
         if ((x < 1) || (x > gridSize) || (y < 1) || (y > gridSize)) {
             return -1;
         }
@@ -95,30 +98,39 @@ public class Player implements Saveable {
         return gridSize;
     }
 
+    // EFFECTS: returns the number of points that this gained
     public int getPoints() {
         return points;
     }
 
+    // EFFECTS: returns the number of moves that this made
     public int getMoveCount() {
         return moves.size();
     }
 
+    // EFFECTS: modifiers uses for testing only
     public void setPoints(int points) {
         this.points = points;
     }
 
+    // EFFECTS: modifiers uses for testing only
     public void setGridSize(int gridSize) {
         this.gridSize = gridSize;
     }
 
+    // EFFECTS: modifiers uses for testing only
     public List<Ship> getAllShips() {
+        ArrayList<Ship> ships = new ArrayList<>(this.ships);
         return ships;
     }
 
+    // MODIFIES: this
+    // EFFECTS: modifier used for testing only
     public void addMove(int x, int y) {
         moves.add(new Pair<>(x, y));
     }
 
+    // EFFECTS: save data of this player to
     @Override
     public void save(PrintWriter printWriter) {
         printWriter.print(gridSize);
