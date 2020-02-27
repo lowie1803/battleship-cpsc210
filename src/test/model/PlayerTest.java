@@ -3,6 +3,7 @@ package model;
 import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import settings.Settings;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -96,5 +97,10 @@ public class PlayerTest {
         //misc
         assertEquals(player[0].latestMove(), new Pair<>(4, 6));
         assertEquals(player[0].getGridSize(), 8);
+        assertEquals(player[0].getMoveCount(), 4);
+//        assertEquals(player[0]);
+        player[0].setPoints(3);
+        assertEquals(player[0].getPoints(), 3);
+        assertEquals(player[0].getGridSize(), Settings.DEFAULT_GRID_SIZE);
     }
 }

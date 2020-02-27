@@ -29,10 +29,10 @@ public class BattleShipApp {
 
         while (true) {
             if (loadGame.length() == 0) {
-                command = commandGetter("Enter s to start new game, q to quit: ", legalCommand);
+                command = stringCommandGetter("Enter s to start new game, q to quit: ", legalCommand);
             } else {
                 legalCommand.add("l");
-                command = commandGetter("Enter s to start new game, q to quit, l to load game: ", legalCommand);
+                command = stringCommandGetter("Enter s to start new game, q to quit, l to load game: ", legalCommand);
                 legalCommand.remove("l");
             }
             if (command.equals("s")) {
@@ -45,7 +45,7 @@ public class BattleShipApp {
         }
     }
 
-    private String commandGetter(String description, Set<String> legalCommand) {
+    private String stringCommandGetter(String description, Set<String> legalCommand) {
         System.out.println(description);
         String cmd;
         cmd = input.next();
@@ -93,7 +93,7 @@ public class BattleShipApp {
                 legalCommand.add("a");
                 legalCommand.add("s");
                 legalCommand.add("q");
-                String command = commandGetter(
+                String command = stringCommandGetter(
                         "Type a to attack, or s to view current score, or q to quit and save...", legalCommand);
                 if (command.equals("a")) {
                     makeInputtedAttack(player[0], player[1]);
@@ -137,7 +137,7 @@ public class BattleShipApp {
     }
 
     private void clearSavedGame() {
-        Writer writer = null;
+        Writer writer;
         try {
             writer = new Writer(new File(Settings.SAVED_GAMES_DATA));
             writer.close();
@@ -145,6 +145,7 @@ public class BattleShipApp {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
+            System.out.println("Do something!");
         }
     }
 
@@ -189,14 +190,12 @@ public class BattleShipApp {
     // MODIFIES: this
     // EFFECTS: read from input for player to create new ship
     private void getInputForShip(Player p, int length) {
-        System.out.println("How would ship of size " + length + " orient?\n"
-                + "Type H for horizontal. Type V for vertical.");
-        String commandString = input.next();
+        Set<String> legalCommands = new HashSet<>();
+        legalCommands.add("H");
+        legalCommands.add("V");
 
-        while (!commandString.equals("H") && !commandString.equals("V")) {
-            System.out.println("Wrong command, please retype!\nType H for horizontal. Type V for vertical.");
-            commandString = input.next();
-        }
+        String commandString = stringCommandGetter("How would ship of size " + length + " orient?\n"
+                + "Type H for horizontal. Type V for vertical.", legalCommands);
         boolean isHorizontal = commandString.equals("H");
 
 

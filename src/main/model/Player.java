@@ -111,6 +111,10 @@ public class Player implements Saveable {
         this.gridSize = gridSize;
     }
 
+    public List<Ship> getAllShips() {
+        return ships;
+    }
+
     public void addMove(int x, int y) {
         moves.add(new Pair<>(x, y));
     }

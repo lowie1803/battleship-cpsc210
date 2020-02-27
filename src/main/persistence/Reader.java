@@ -62,6 +62,7 @@ public class Reader {
         }
 
         int moveCount = Integer.parseInt(components.get(currentIndex));
+        currentIndex++;
         for (int i = 0; i < moveCount; i++) {
             player.addMove(Integer.parseInt(components.get(currentIndex)),
                     Integer.parseInt(components.get(currentIndex + 1)));
