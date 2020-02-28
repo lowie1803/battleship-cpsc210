@@ -16,7 +16,7 @@ public abstract class Player implements Saveable {
     private List<Pair<Integer, Integer>> moves;
 
     public Player() {
-        gridSize = Settings.DEFAULT_GRID_SIZE;
+        gridSize = Settings.GRID_SIZE;
         ships = new ArrayList<>(0);
         points = 0;
         moves = new ArrayList<>(0);
@@ -69,12 +69,13 @@ public abstract class Player implements Saveable {
     // MODIFIES: this
     // REQUIRES: x in [1, gridSize], y in [1, gridSize]
     // EFFECTS: returns number of points that this player concede to other team if they attack cell (x, y)
-    //          the number of point concede = gridSize - shipSize + bonus
+    //          the number of point concede = gridSize - shipSize + bonus. Also, destroy the ships if the
+    //          attack hits
     public int concede(int x, int y) {
         int ret = 0;
         for (Ship s: ships) {
             if (s.hit(x, y) && !s.isDestroyed()) {
-                ret += gridSize - s.getSize() + Settings.DEFAULT_BONUS_FOR_EACH_DESTROYED_SHIP;
+                ret += gridSize - s.getSize() + Settings.SHIP_DESTRUCTION_BONUS;
                 s.setDestroyed(true);
             }
         }

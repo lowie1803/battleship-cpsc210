@@ -1,7 +1,6 @@
 package model;
 
 import settings.Settings;
-import sun.security.krb5.internal.KDCOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,12 +50,12 @@ public class RandomizedBot extends Player {
         boolean horizontal = rand.nextBoolean();
         if (horizontal) {
             return new Ship(size, true,
-                    rand.nextInt(Settings.DEFAULT_GRID_SIZE - size + 1) + 1,
-                    rand.nextInt(Settings.DEFAULT_GRID_SIZE + 1) + 1);
+                    rand.nextInt(Settings.GRID_SIZE - size + 1) + 1,
+                    rand.nextInt(Settings.GRID_SIZE + 1) + 1);
         } else {
             return new Ship(size, false,
-                    rand.nextInt(Settings.DEFAULT_GRID_SIZE + 1) + 1,
-                    rand.nextInt(Settings.DEFAULT_GRID_SIZE - size + 1) + 1);
+                    rand.nextInt(Settings.GRID_SIZE + 1) + 1,
+                    rand.nextInt(Settings.GRID_SIZE - size + 1) + 1);
         }
     }
 }

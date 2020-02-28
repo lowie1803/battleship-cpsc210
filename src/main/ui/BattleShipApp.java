@@ -73,13 +73,12 @@ public class BattleShipApp {
     // the comp.
     private void initialGame() {
         player[0] = new HumanPlayer();
-        player[1] = new RandomizedBot();
         getInputForShip(player[0], Settings.DEFAULT_SHIP1_SIZE);
         getInputForShip(player[0], Settings.DEFAULT_SHIP2_SIZE);
         getInputForShip(player[0], Settings.DEFAULT_SHIP3_SIZE);
 
+        player[1] = new RandomizedBot();
         player[1].generateAllShips(settings.defaultSizes);
-
         runGame();
     }
 
@@ -174,19 +173,6 @@ public class BattleShipApp {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             System.out.println("Do something!");
-        }
-    }
-
-
-    // MODIFIES: this
-    // EFFECTS: make randomized attack for the comp
-    private void makeRandomAttack(Player offense, Player defense) {
-        Random rand = new Random();
-        int x = rand.nextInt(defense.getGridSize()) + 1;
-        int y = rand.nextInt(defense.getGridSize()) + 1;
-        while (offense.attack(defense, x, y) == -1) {
-            x = rand.nextInt(defense.getGridSize()) + 1;
-            y = rand.nextInt(defense.getGridSize()) + 1;
         }
     }
 

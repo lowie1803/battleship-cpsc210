@@ -101,6 +101,6 @@ public class PlayerTest {
 //        assertEquals(player[0]);
         player[0].setPoints(3);
         assertEquals(player[0].getPoints(), 3);
-        assertEquals(player[0].getGridSize(), Settings.DEFAULT_GRID_SIZE);
+        assertEquals(player[0].getGridSize(), Settings.GRID_SIZE);
     }
 }
