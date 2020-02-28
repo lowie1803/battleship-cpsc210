@@ -8,6 +8,12 @@ import java.util.Random;
 
 public class RandomizedBot extends Player {
     @Override
+    public boolean inGameMenu(Player opponent, int index) {
+        makeAnAttack(opponent);
+        return true;
+    }
+
+    @Override
     public void makeAnAttack(Player opponent) {
         Random rand = new Random();
         int x = rand.nextInt(opponent.getGridSize()) + 1;

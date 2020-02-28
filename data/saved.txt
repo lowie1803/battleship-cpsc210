@@ -1,2 +1,0 @@
-8,0,3,8,true,1,1,false,3,true,2,2,false,2,true,3,3,false,0,
-8,0,3,8,true,1,8,false,3,true,3,7,false,2,true,4,1,false,0,

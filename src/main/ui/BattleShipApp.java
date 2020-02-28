@@ -124,7 +124,7 @@ public class BattleShipApp {
         String command = stringCommandGetter(
                 "Type a to attack, or s to view current score, or q to quit and save...", legalCommand);
         if (command.equals("a")) {
-            makeInputtedAttack(player[0], player[1]);
+            player[0].makeAnAttack(player[1]);
         } else if (command.equals("s")) {
             System.out.println("Current score: " + player[0].getPoints() + " " + player[1].getPoints());
         } else {

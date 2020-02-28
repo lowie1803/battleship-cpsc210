@@ -23,6 +23,8 @@ public abstract class Player implements Saveable {
     }
 
     // Distinctive for bot and human
+    public abstract boolean inGameMenu(Player opponent, int index);
+
     public abstract void makeAnAttack(Player opponent);
 
     public abstract void generateAllShips(List<Integer> sizes);
