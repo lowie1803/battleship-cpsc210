@@ -1,6 +1,7 @@
-package model;
+package model.players;
 
 import javafx.util.Pair;
+import model.Ship;
 import persistence.Reader;
 import persistence.Saveable;
 import settings.Settings;
@@ -27,7 +28,9 @@ public abstract class Player implements Saveable {
 
     public abstract void makeAnAttack(Player opponent);
 
-    public abstract void generateAllShips(List<Integer> sizes);
+    public abstract void addAllShips(List<Integer> sizes);
+
+    public abstract Ship generateOneShip(int size);
 
     // MODIFIES: this
     // EFFECTS: add ship to the ship set
@@ -44,6 +47,16 @@ public abstract class Player implements Saveable {
             }
         }
         ships.add(ship);
+        return true;
+    }
+
+    protected boolean tryAddShips(List<Ship> ships) {
+        for (Ship ship: ships) {
+            if (!addShip(ship)) {
+                clearShips();
+                return false;
+            }
+        }
         return true;
     }
 

@@ -1,10 +1,9 @@
 package persistence;
 
 import javafx.util.Pair;
-import model.Player;
+import model.players.Player;
 import model.Ship;
 import org.junit.jupiter.api.Test;
-import org.omg.PortableInterceptor.INACTIVE;
 
 import java.io.File;
 import java.io.IOException;

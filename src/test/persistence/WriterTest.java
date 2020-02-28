@@ -1,9 +1,9 @@
 package persistence;
 
 import javafx.util.Pair;
-import model.HumanPlayer;
-import model.Player;
-import model.RandomizedBot;
+import model.players.HumanPlayer;
+import model.players.Player;
+import model.players.RandomizedBot;
 import model.Ship;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,8 @@
 package persistence;
 
-import model.HumanPlayer;
-import model.Player;
-import model.RandomizedBot;
+import model.players.HumanPlayer;
+import model.players.Player;
+import model.players.RandomizedBot;
 import model.Ship;
 
 import java.io.File;

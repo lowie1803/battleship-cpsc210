@@ -1,12 +1,11 @@
 package ui;
 
-import model.HumanPlayer;
-import model.Player;
-import model.RandomizedBot;
+import model.players.HumanPlayer;
+import model.players.Player;
+import model.players.RandomizedBot;
 import persistence.Reader;
 import persistence.Writer;
 import settings.Settings;
-import model.Ship;
 
 import java.io.*;
 import java.util.*;
@@ -47,7 +46,7 @@ public class BattleShipApp {
         }
     }
 
-    private String stringCommandGetter(String description, Set<String> legalCommand) {
+    public String stringCommandGetter(String description, Set<String> legalCommand) {
         System.out.println(description);
         String cmd;
         cmd = input.next();
@@ -73,12 +72,10 @@ public class BattleShipApp {
     // the comp.
     private void initialGame() {
         player[0] = new HumanPlayer();
-        getInputForShip(player[0], Settings.DEFAULT_SHIP1_SIZE);
-        getInputForShip(player[0], Settings.DEFAULT_SHIP2_SIZE);
-        getInputForShip(player[0], Settings.DEFAULT_SHIP3_SIZE);
+        player[0].addAllShips(settings.defaultSizes);
 
         player[1] = new RandomizedBot();
-        player[1].generateAllShips(settings.defaultSizes);
+        player[1].addAllShips(settings.defaultSizes);
         runGame();
     }
 
@@ -86,22 +83,19 @@ public class BattleShipApp {
     // EFFECTS: letting player and comp take turns to play the game
     private void runGame() {
         while (!player[0].lostGame() && !player[1].lostGame()) {
-
             int currentPlayer = turnCount() % 2;
             int lastPlayer = (currentPlayer ^ 1);
-//            System.out.println(turnCount() + " " + currentPlayer + " " + lastPlayer);
+
             if (turnCount() > 0) {
                 lastMoveAnnouncer(player[lastPlayer], lastPlayer + 1);
             } else {
                 beginAnnouncer();
             }
-            if (currentPlayer == 0) { // not a human player
-                boolean quit = inGameMenu();
-                if (quit) {
-                    return;
-                }
-            } else {
-                player[currentPlayer].makeAnAttack(player[lastPlayer]);
+
+            boolean quit = player[currentPlayer].inGameMenu(player[lastPlayer], currentPlayer);
+            if (quit) {
+                saveGameToFile();
+                return;
             }
         }
         concludeGame();
@@ -113,25 +107,6 @@ public class BattleShipApp {
 
     private void beginAnnouncer() {
         System.out.println("GAME BEGINS!");
-    }
-
-    // EFFECTS: return true if chose to quit & save
-    private boolean inGameMenu() {
-        Set<String> legalCommand = new HashSet<>();
-        legalCommand.add("a");
-        legalCommand.add("s");
-        legalCommand.add("q");
-        String command = stringCommandGetter(
-                "Type a to attack, or s to view current score, or q to quit and save...", legalCommand);
-        if (command.equals("a")) {
-            player[0].makeAnAttack(player[1]);
-        } else if (command.equals("s")) {
-            System.out.println("Current score: " + player[0].getPoints() + " " + player[1].getPoints());
-        } else {
-            saveGameToFile();
-            return true;
-        }
-        return false;
     }
 
     private void lastMoveAnnouncer(Player p, int index) {
@@ -154,9 +129,9 @@ public class BattleShipApp {
 
     private void concludeGame() {
         if (player[0].lostGame()) {
-            System.out.println("You lost!");
+            System.out.println("Player 2 won!");
         } else {
-            System.out.println("You won!");
+            System.out.println("Player 1 won!");
         }
         System.out.println("The score is " + player[0].getPoints() + " - " + player[1].getPoints() + "\n\n");
 
@@ -173,55 +148,6 @@ public class BattleShipApp {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             System.out.println("Do something!");
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: input an attack for player
-    private void makeInputtedAttack(Player offense, Player defense) {
-        System.out.println("Choose one grid to attack!\n(X first, Y follows)");
-        int x = input.nextInt();
-        int y = input.nextInt();
-        int result = offense.attack(defense, x, y);
-
-        while (result == -1) {
-            System.out.println("Illegal move! Please redo!");
-            System.out.println("(Either your choice are out of bounds or you have made this move before)");
-            x = input.nextInt();
-            y = input.nextInt();
-            result = offense.attack(defense, x, y);
-        }
-
-        if (result == 0) {
-            System.out.println("MISSED!\n");
-        } else {
-            System.out.println("HIT! Earned " + result + " points!\n");
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: read from input for player to create new ship
-    private void getInputForShip(Player p, int length) {
-        Set<String> legalCommands = new HashSet<>();
-        legalCommands.add("H");
-        legalCommands.add("V");
-
-        String commandString = stringCommandGetter("How would ship of size " + length + " orient?\n"
-                + "Type H for horizontal. Type V for vertical.", legalCommands);
-        boolean isHorizontal = commandString.equals("H");
-
-
-        if (isHorizontal) {
-            System.out.println("Type in the leftmost coordinates for the ship:\nX first, Y follows:");
-        } else {
-            System.out.println("Type in the upmost coordinates for the ship:\nX first, Y follows:");
-        }
-        int x = input.nextInt();
-        int y = input.nextInt();
-        while (!p.addShip(new Ship(length, isHorizontal, x, y))) {
-            System.out.println("Conflicted! Please type in the coordinates again!\nX first, Y follows");
-            x = input.nextInt();
-            y = input.nextInt();
         }
     }
 }

@@ -1,5 +1,7 @@
-package model;
+package model.players;
 
+import model.Ship;
+import model.players.Player;
 import settings.Settings;
 
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ public class RandomizedBot extends Player {
     @Override
     public boolean inGameMenu(Player opponent, int index) {
         makeAnAttack(opponent);
-        return true;
+        return false;
     }
 
     @Override
@@ -25,33 +27,25 @@ public class RandomizedBot extends Player {
     }
 
     @Override
-    public void generateAllShips(List<Integer> sizes) {
-        System.out.println("Number of ships in bot: " + sizes.size());
+    public void addAllShips(List<Integer> sizes) {
+//        System.out.println("Number of ships in bot: " + sizes.size());
         List<Ship> ships = new ArrayList<>(0);
         for (Integer i: sizes) {
-            ships.add(randomShip(i));
+            ships.add(generateOneShip(i));
         }
 
         while (!tryAddShips(ships)) {
             ships.clear();
             ships = new ArrayList<>(0);
             for (Integer i: sizes) {
-                ships.add(randomShip(i));
+                ships.add(generateOneShip(i));
             }
         }
     }
 
-    private boolean tryAddShips(List<Ship> ships) {
-        for (Ship ship: ships) {
-            if (!addShip(ship)) {
-                clearShips();
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private Ship randomShip(int size) {
+    @Override
+    // EFFECTS: uses random to generate one ship.
+    public Ship generateOneShip(int size) {
         Random rand = new Random();
         boolean horizontal = rand.nextBoolean();
         if (horizontal) {
