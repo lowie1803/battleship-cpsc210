@@ -4,7 +4,7 @@ import javafx.util.Pair;
 import model.players.HumanPlayer;
 import model.players.Player;
 import model.players.RandomizedBot;
-import model.Ship;
+import model.ship.Ship;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,7 +1,7 @@
 package model.players;
 
 import javafx.util.Pair;
-import model.Ship;
+import model.ship.Ship;
 import persistence.Reader;
 import persistence.Saveable;
 import settings.Settings;

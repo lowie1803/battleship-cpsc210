@@ -3,7 +3,7 @@ package persistence;
 import model.players.HumanPlayer;
 import model.players.Player;
 import model.players.RandomizedBot;
-import model.Ship;
+import model.ship.Ship;
 
 import java.io.File;
 import java.io.IOException;

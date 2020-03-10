@@ -1,4 +1,4 @@
-package model;
+package model.ship;
 
 
 import javafx.util.Pair;
@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ship implements Saveable {
+    // TODO: re-implement these methods so that the rule return to normal
+    // TODO: Add new types of ships so that the game becomes interesting
+
     private int size;
     private boolean isHorizontal;
     private int startingX;

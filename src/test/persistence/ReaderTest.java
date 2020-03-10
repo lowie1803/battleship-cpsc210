@@ -2,7 +2,7 @@ package persistence;
 
 import javafx.util.Pair;
 import model.players.Player;
-import model.Ship;
+import model.ship.Ship;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

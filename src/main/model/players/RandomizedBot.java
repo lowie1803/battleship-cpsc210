@@ -1,7 +1,6 @@
 package model.players;
 
-import model.Ship;
-import model.players.Player;
+import model.ship.Ship;
 import settings.Settings;
 
 import java.util.ArrayList;
