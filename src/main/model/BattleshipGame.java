@@ -7,6 +7,7 @@ import model.players.UITestPlayer;
 import persistence.Reader;
 import persistence.Writer;
 import settings.Settings;
+import ui.MoveAlreadyTakenException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,7 +18,7 @@ public class BattleshipGame {
     private Player[] player = {null, null};
     Settings settings = new Settings();
     private int gridSize;
-    private GameMode gameMode = GameMode.PVCE;
+    private GameMode gameMode = GameMode.PVP;
     private boolean turnSwitch = false;
 
     public BattleshipGame() {
@@ -31,39 +32,42 @@ public class BattleshipGame {
     private void initialGame() {
         //TODO: remodify players after testing
         player[0] = new UITestPlayer();
-//        player[0].addAllShips(settings.defaultSizes);
+        player[0].addAllShips(settings.defaultSizes);
 
         //TODO: remodify players after testing
         player[1] = new UITestPlayer();
-//        player[1].addAllShips(settings.defaultSizes);
+        player[1].addAllShips(settings.defaultSizes);
 
         player[0].setOpponent(player[1]);
         player[1].setOpponent(player[0]);
 
         // TODO: Delete after testing
-        player[0].attack(1, 1);
-        player[0].attack(6, 5);
+//        player[0].attack(1, 1);
+//        player[0].attack(6, 5);
     }
 
-    // MODIFIES: this
-    // EFFECTS: letting player and comp take turns to play the game
-    private void runGame() {
-        while (!player[0].lostGame() && !player[1].lostGame()) {
-            int currentPlayer;
-            if (!turnSwitch) {
-                currentPlayer = 0;
-            } else {
-                currentPlayer = 1;
-            }
-
-            boolean quit = player[currentPlayer].inGameMenu(currentPlayer);
-            if (quit) {
-                saveGameToFile();
-                return;
-            }
-            changeTurn();
+    private Player currentPlayer() {
+        if (turnSwitch) {
+            return player[1];
+        } else {
+            return player[0];
         }
-        concludeGame();
+    }
+
+    public void inflictAttack(int x, int y) throws MoveAlreadyTakenException {
+        int pts = currentPlayer().attack(x, y);
+        if (pts == -1) {
+            throw new MoveAlreadyTakenException();
+        }
+
+        System.out.println("Gained " + pts + " points!");
+
+        if (gameMode == GameMode.PVP) {
+            turnSwitch = !turnSwitch;
+        } else {
+            player2().makeAnAttack();
+        }
+
     }
 
     private void saveGameToFile() {
@@ -104,12 +108,12 @@ public class BattleshipGame {
     }
 
     private void loadGame() {
-        try {
-            player = Reader.readPlayers(new File(Settings.SAVED_GAMES_DATA));
-            runGame();
-        } catch (IOException e) {
-//            System.out.println("Error: no saved games.");
-        }
+//        try {
+//            player = Reader.readPlayers(new File(Settings.SAVED_GAMES_DATA));
+//            runGame();
+//        } catch (IOException e) {
+////            System.out.println("Error: no saved games.");
+//        }
     }
 
     // MODIFIES: this

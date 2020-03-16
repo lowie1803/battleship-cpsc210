@@ -15,8 +15,6 @@ public class DisplayPanel extends JPanel {
     private static final int BOARD_X1 = 50;
     private static final int BOARD_X2 = 350;
     private static final int BOARD_PIXEL_SIZE = 200;
-
-
     BattleshipGame game;
 
     public DisplayPanel(BattleshipGame game) {

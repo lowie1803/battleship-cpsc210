@@ -7,8 +7,11 @@ import model.players.RandomizedBot;
 import settings.Settings;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class App extends JFrame {
+    private static final int INTERVAL = 20;
     private Settings settings = new Settings();
 
     GamePanel gamePanel;
@@ -27,10 +30,20 @@ public class App extends JFrame {
         add(gamePanel);
         pack();
         setVisible(true);
-        runApp();
+        addTimer();
+//        runApp();
     }
 
-    private void runApp() {
+    private void addTimer() {
+        Timer t = new Timer(INTERVAL, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+//                battleshipGame.update();
+                gamePanel.repaint();
+//                sp.update();
+            }
+        });
 
+        t.start();
     }
 }

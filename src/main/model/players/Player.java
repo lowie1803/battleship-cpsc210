@@ -127,7 +127,7 @@ public abstract class Player implements Saveable {
     // EFFECTS: returns the number of points that this gained
     public int getPoints() {
         int ret = 0;
-        for (Ship s: ships) {
+        for (Ship s: opponent.ships) {
             ret += s.pointEarnedFromShip();
         }
         return ret;

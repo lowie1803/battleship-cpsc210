@@ -45,6 +45,12 @@ public class InputPanel extends JPanel {
 
         attackButton.addActionListener(e -> {
             System.out.println(spRow.getValue());
+            try {
+                game.inflictAttack((int)(((String)spColumn.getValue()).charAt(0)) - (int)'0',
+                        (int)(((String)spRow.getValue()).charAt(0)) - (int)'A' + 1);
+            } catch (MoveAlreadyTakenException ex) {
+                System.out.println("Move already done!");
+            }
         });
     }
 
