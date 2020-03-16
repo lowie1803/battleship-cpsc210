@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Settings {
+    public static int FRAME_WIDTH = 600;
+    public static int FRAME_HEIGHT = 600;
+
+
     public static int DEFAULT_SHIP1_SIZE = 8;
     public static int DEFAULT_SHIP2_SIZE = 3;
     public static int DEFAULT_SHIP3_SIZE = 2;
