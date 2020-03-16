@@ -1,5 +1,6 @@
 package persistence;
 
+import model.Move;
 import model.players.HumanPlayer;
 import model.players.Player;
 import model.players.RandomizedBot;
@@ -54,7 +55,7 @@ public class Reader {
     // - follows by 2*m ints, denotes infos of m moves.
     private static void parsePlayer(List<String> components, Player player) {
         player.setGridSize(Integer.parseInt(components.get(0)));
-        player.setPoints(Integer.parseInt(components.get(1)));
+//        player.setPoints(Integer.parseInt(components.get(1)));
         int shipCount = Integer.parseInt(components.get(2));
 
         int currentIndex = 3;
@@ -66,8 +67,9 @@ public class Reader {
         int moveCount = Integer.parseInt(components.get(currentIndex));
         currentIndex++;
         for (int i = 0; i < moveCount; i++) {
+            // TODO: Reader bug #1
             player.addMove(Integer.parseInt(components.get(currentIndex)),
-                    Integer.parseInt(components.get(currentIndex + 1)));
+                    Integer.parseInt(components.get(currentIndex + 1)), Move.Status.HIT);
             currentIndex += 2;
         }
 //        return player;
@@ -80,7 +82,8 @@ public class Reader {
                 Boolean.parseBoolean(components.get(1)),
                 Integer.parseInt(components.get(2)),
                 Integer.parseInt(components.get(3)));
-        ship.setDestroyed(Boolean.parseBoolean(components.get(4)));
+        // TODO: Reader Bug 2
+        ship.setDestroyed(); //
         return ship;
     }
 

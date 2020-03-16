@@ -9,17 +9,17 @@ import java.util.Random;
 
 public class RandomizedBot extends Player {
     @Override
-    public boolean inGameMenu(Player opponent, int index) {
-        makeAnAttack(opponent);
+    public boolean inGameMenu(int index) {
+        makeAnAttack();
         return false;
     }
 
     @Override
-    public void makeAnAttack(Player opponent) {
+    public void makeAnAttack() {
         Random rand = new Random();
         int x = rand.nextInt(opponent.getGridSize()) + 1;
         int y = rand.nextInt(opponent.getGridSize()) + 1;
-        while (attack(opponent, x, y) == -1) {
+        while (attack(x, y) == -1) {
             x = rand.nextInt(opponent.getGridSize()) + 1;
             y = rand.nextInt(opponent.getGridSize()) + 1;
         }

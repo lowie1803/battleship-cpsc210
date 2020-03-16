@@ -8,7 +8,7 @@ public class HumanPlayer extends Player {
     Scanner input = new Scanner(System.in);
 
     @Override
-    public boolean inGameMenu(Player opponent, int index) {
+    public boolean inGameMenu(int index) {
         Set<String> legalCommand = new HashSet<>();
         legalCommand.add("a");
         legalCommand.add("s");
@@ -16,7 +16,7 @@ public class HumanPlayer extends Player {
         String command = stringCommandGetter(
                 "Type a to attack, or s to view current score, or q to quit and save...", legalCommand);
         if (command.equals("a")) {
-            makeAnAttack(opponent);
+            makeAnAttack();
         } else if (command.equals("s")) {
             System.out.println("Current score: " + getPoints() + " " + opponent.getPoints());
         } else {
@@ -26,18 +26,18 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public void makeAnAttack(Player opponent) {
+    public void makeAnAttack() {
         System.out.println("Choose one grid to attack!\n(X first, Y follows)");
         int x = input.nextInt();
         int y = input.nextInt();
-        int result = attack(opponent, x, y);
+        int result = attack(x, y);
 
         while (result == -1) {
             System.out.println("Illegal move! Please redo!");
             System.out.println("(Either your choice are out of bounds or you have made this move before)");
             x = input.nextInt();
             y = input.nextInt();
-            result = attack(opponent, x, y);
+            result = attack(x, y);
         }
 
         if (result == 0) {

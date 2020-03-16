@@ -10,21 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ship implements Saveable {
-    // TODO: re-implement these methods so that the rule return to normal
     // TODO: Add new types of ships so that the game becomes interesting
-
     private int size;
     private boolean isHorizontal;
     private int startingX;
     private int startingY;
-    private boolean destroyed;
+    private int destroyed;
 
     public Ship(int s, boolean h, int x, int y) {
         size = s;
         isHorizontal = h;
         startingX = x;
         startingY = y;
-        destroyed = false;
+        destroyed = 0;
     }
 
     // EFFECTS: returns true if a bullet fire at (x, y) would damage this ship
@@ -70,12 +68,12 @@ public class Ship implements Saveable {
         return false;
     }
 
-    public void setDestroyed(boolean destroyed1) {
-        destroyed = destroyed1;
+    public void setDestroyed() {
+        destroyed++;
     }
 
     public boolean isDestroyed() {
-        return destroyed;
+        return destroyed >= size;
     }
 
     public int getSize() {
@@ -84,6 +82,10 @@ public class Ship implements Saveable {
 
     public boolean horizontal() {
         return isHorizontal;
+    }
+
+    public int pointEarnedFromShip() {
+        return (100 * destroyed / size);
     }
 
     @Override

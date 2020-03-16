@@ -87,7 +87,7 @@ public class ShipTest {
     void testDestroyShip() {
         ship = new Ship(normalSize, true, 3, 4);
         assertFalse(ship.isDestroyed());
-        ship.setDestroyed(true);
+//        ship.setDestroyed(true);
         assertTrue(ship.isDestroyed());
     }
 

@@ -3,6 +3,7 @@ package model;
 import model.players.HumanPlayer;
 import model.players.Player;
 import model.players.RandomizedBot;
+import model.players.UITestPlayer;
 import persistence.Reader;
 import persistence.Writer;
 import settings.Settings;
@@ -21,19 +22,27 @@ public class BattleshipGame {
 
     public BattleshipGame() {
         gridSize = Settings.GRID_SIZE;
-//        initialGame();
+        initialGame();
     }
 
     // MODIFIES: this
     // EFFECTS: initiate a game, including letting players arrange the ships and randomize the arrangement for
     // the comp.
     private void initialGame() {
+        //TODO: remodify players after testing
+        player[0] = new UITestPlayer();
+//        player[0].addAllShips(settings.defaultSizes);
 
-        player[0] = new HumanPlayer();
-        player[0].addAllShips(settings.defaultSizes);
+        //TODO: remodify players after testing
+        player[1] = new UITestPlayer();
+//        player[1].addAllShips(settings.defaultSizes);
 
-        player[1] = new RandomizedBot();
-        player[1].addAllShips(settings.defaultSizes);
+        player[0].setOpponent(player[1]);
+        player[1].setOpponent(player[0]);
+
+        // TODO: Delete after testing
+        player[0].attack(1, 1);
+        player[0].attack(6, 5);
     }
 
     // MODIFIES: this
@@ -41,15 +50,13 @@ public class BattleshipGame {
     private void runGame() {
         while (!player[0].lostGame() && !player[1].lostGame()) {
             int currentPlayer;
-            int lastPlayer;
             if (!turnSwitch) {
                 currentPlayer = 0;
             } else {
                 currentPlayer = 1;
             }
-            lastPlayer = (currentPlayer ^ 1);
 
-            boolean quit = player[currentPlayer].inGameMenu(player[lastPlayer], currentPlayer);
+            boolean quit = player[currentPlayer].inGameMenu(currentPlayer);
             if (quit) {
                 saveGameToFile();
                 return;
@@ -121,6 +128,14 @@ public class BattleshipGame {
 
     public int getGridSize() {
         return gridSize;
+    }
+
+    public Player player1() {
+        return player[0];
+    }
+
+    public Player player2() {
+        return player[1];
     }
 
 

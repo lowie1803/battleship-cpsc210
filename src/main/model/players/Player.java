@@ -1,6 +1,7 @@
 package model.players;
 
 import javafx.util.Pair;
+import model.Move;
 import model.ship.Ship;
 import persistence.Reader;
 import persistence.Saveable;
@@ -11,22 +12,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Player implements Saveable {
+    Player opponent;
     private int gridSize;
     private List<Ship> ships;
-    private int points;
-    private List<Pair<Integer, Integer>> moves;
+//    private int points;
+    private List<Move> moves;
 
     public Player() {
         gridSize = Settings.GRID_SIZE;
         ships = new ArrayList<>(0);
-        points = 0;
+//        points = 0;
         moves = new ArrayList<>(0);
     }
 
-    // Distinctive for bot and human
-    public abstract boolean inGameMenu(Player opponent, int index);
+    public void setOpponent(Player opponent) {
+        this.opponent = opponent;
+    }
 
-    public abstract void makeAnAttack(Player opponent);
+    // Distinctive for bot and human
+    public abstract boolean inGameMenu(int index);
+
+    public abstract void makeAnAttack();
 
     public abstract void addAllShips(List<Integer> sizes);
 
@@ -64,37 +70,38 @@ public abstract class Player implements Saveable {
     // REQUIRES: x in [1, gridSize], y in [1, gridSize]
     // EFFECTS: attack, destroy, and gain point if this has destroy a ship from other player.
     //          return -1 if this move is ineligible, >=0 as the number of point gained.
-    public int attack(Player other, int x, int y) {
+    public int attack(int x, int y) {
 //        System.out.println("Try attack " + x + " " + y);
         if ((x < 1) || (x > gridSize) || (y < 1) || (y > gridSize)) {
             return -1;
         }
-        for (Pair<Integer, Integer> p: moves) {
-            if ((p.getKey() == x) && (p.getValue() == y)) {
+        for (Move p: moves) {
+            if ((p.getXCoordinate() == x) && (p.getYCoordinate() == y)) {
                 return -1;
             }
         }
 
-        int ret = other.concede(x, y);
-        points += ret;
-        addMove(x, y);
-        return ret;
+        int lastPoint = getPoints();
+        Move.Status status = opponent.concede(x, y);
+        moves.add(new Move(x, y, status));
+        if (status != Move.Status.MISS) {
+            return getPoints() - lastPoint;
+        }
+        return 0;
     }
 
     // MODIFIES: this
     // REQUIRES: x in [1, gridSize], y in [1, gridSize]
-    // EFFECTS: returns number of points that this player concede to other team if they attack cell (x, y)
-    //          the number of point concede = gridSize - shipSize + bonus. Also, destroy the ships if the
-    //          attack hits
-    public int concede(int x, int y) {
-        int ret = 0;
+    // EFFECTS: returns if the attack hit or miss
+    public Move.Status concede(int x, int y) {
+//        int ret = 0;
         for (Ship s: ships) {
-            if (s.hit(x, y) && !s.isDestroyed()) {
-                ret += gridSize - s.getSize() + Settings.SHIP_DESTRUCTION_BONUS;
-                s.setDestroyed(true);
+            if (s.hit(x, y)) {
+                s.setDestroyed();
+                return Move.Status.HIT;
             }
         }
-        return ret;
+        return Move.Status.MISS;
     }
 
     //EFFECTS: return 1 if all ship got destroyed.
@@ -108,7 +115,7 @@ public abstract class Player implements Saveable {
     }
 
     // EFFECTS: Returns the latest move of the player
-    public Pair<Integer, Integer> latestMove() {
+    public Move latestMove() {
         return moves.get(moves.size() - 1);
     }
 
@@ -119,7 +126,11 @@ public abstract class Player implements Saveable {
 
     // EFFECTS: returns the number of points that this gained
     public int getPoints() {
-        return points;
+        int ret = 0;
+        for (Ship s: ships) {
+            ret += s.pointEarnedFromShip();
+        }
+        return ret;
     }
 
     // EFFECTS: returns the number of moves that this made
@@ -132,10 +143,6 @@ public abstract class Player implements Saveable {
         ships.clear();
     }
 
-    // EFFECTS: modifiers uses for testing only
-    public void setPoints(int points) {
-        this.points = points;
-    }
 
     // EFFECTS: modifiers uses for testing only
     public void setGridSize(int gridSize) {
@@ -144,14 +151,17 @@ public abstract class Player implements Saveable {
 
     // EFFECTS: modifiers uses for testing only
     public List<Ship> getAllShips() {
-        ArrayList<Ship> ships = new ArrayList<>(this.ships);
-        return ships;
+        return new ArrayList<>(this.ships);
     }
 
     // MODIFIES: this
     // EFFECTS: modifier used for testing only
-    public void addMove(int x, int y) {
-        moves.add(new Pair<>(x, y));
+    public void addMove(int x, int y, Move.Status status) {
+        moves.add(new Move(x, y, status));
+    }
+
+    public List<Move> getMoves() {
+        return moves;
     }
 
     // EFFECTS: save data of this player to
@@ -159,7 +169,7 @@ public abstract class Player implements Saveable {
     public void save(PrintWriter printWriter) {
         printWriter.print(gridSize);
         printWriter.print(Reader.DELIMITER);
-        printWriter.print(points);
+        printWriter.print(getPoints());
         printWriter.print(Reader.DELIMITER);
         printWriter.print(ships.size());
         printWriter.print(Reader.DELIMITER);
@@ -168,10 +178,10 @@ public abstract class Player implements Saveable {
         }
         printWriter.print(moves.size());
         printWriter.print(Reader.DELIMITER);
-        for (Pair i: moves) {
-            printWriter.print(i.getKey());
+        for (Move i: moves) {
+            printWriter.print(i.getXCoordinate());
             printWriter.print(Reader.DELIMITER);
-            printWriter.print(i.getValue());
+            printWriter.print(i.getYCoordinate());
             printWriter.print(Reader.DELIMITER);
         }
         printWriter.println();

@@ -32,13 +32,11 @@ public class WriterTest {
         assertTrue(players[1].addShip(new Ship(8, false, 8, 1)));
         assertTrue(players[1].addShip(new Ship(3, true, 1, 1)));
         assertTrue(players[1].addShip(new Ship(2, false, 7, 1)));
-        players[0].addMove(1, 3);
-        players[0].addMove(8, 8);
-        players[0].setPoints(3);
+//        players[0].addMove(1, 3);
+//        players[0].addMove(8, 8);
 
-        players[1].addMove(4, 2);
-        players[1].addMove(2,8);
-        players[1].setPoints(0);
+//        players[1].addMove(4, 2);
+//        players[1].addMove(2,8);
     }
 
     @Test

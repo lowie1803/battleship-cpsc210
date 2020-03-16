@@ -66,28 +66,28 @@ public class PlayerTest {
     @Test
     void testAttack() {
         //0 hits 1's size-8 ship, earn 3 points
-        assertEquals(player[0].attack(player[1], 8, 6), 3);
+        assertEquals(player[0].attack(8, 6), 3);
         //1 hits 0's size-3 ship, earn 8 points
-        assertEquals(player[1].attack(player[0], 4, 5), 8);
+        assertEquals(player[1].attack(4, 5), 8);
 
         //0 misses
-        assertEquals(player[0].attack(player[1], 5, 5), 0);
+        assertEquals(player[0].attack(5, 5), 0);
         //1 hits the corpse of 0's size 3 ship, earn 0 points
-        assertEquals(player[1].attack(player[0], 4, 8), 0);
+        assertEquals(player[1].attack(4, 8), 0);
 
         //0 hits 1's size-2 ship, earn 9 points
-        assertEquals(player[0].attack(player[1], 3, 2), 9);
+        assertEquals(player[0].attack(3, 2), 9);
         //1 make an illegal move
-        assertEquals(player[1].attack(player[0], 9, 3), -1);
+        assertEquals(player[1].attack(9, 3), -1);
         //1 make another illegal move
-        assertEquals(player[1].attack(player[0], 0, 6), -1);
+        assertEquals(player[1].attack(0, 6), -1);
         //1 make a move that he did before (which hit)
-        assertEquals(player[1].attack(player[0], 4, 5), -1);
+        assertEquals(player[1].attack(4, 5), -1);
         //1 misses
-        assertEquals(player[1].attack(player[0], 4, 6), 0);
+        assertEquals(player[1].attack(4, 6), 0);
 
         //0 make a move that he did before (which missed)
-        assertEquals(player[0].attack(player[1], 5, 5), -1);
+        assertEquals(player[0].attack(5, 5), -1);
 
         //points check
         assertEquals(player[0].getPoints(), 12);
@@ -95,7 +95,7 @@ public class PlayerTest {
 
         //finalize the game
         assertFalse(player[1].lostGame());
-        assertEquals(player[0].attack(player[1], 4, 6), 8);
+        assertEquals(player[0].attack(4, 6), 8);
         assertTrue(player[1].lostGame());
 
         //misc
@@ -103,7 +103,7 @@ public class PlayerTest {
         assertEquals(player[0].getGridSize(), 8);
         assertEquals(player[0].getMoveCount(), 4);
 //        assertEquals(player[0]);
-        player[0].setPoints(3);
+//        player[0].setPoints(3);
         assertEquals(player[0].getPoints(), 3);
         assertEquals(player[0].getGridSize(), Settings.GRID_SIZE);
     }

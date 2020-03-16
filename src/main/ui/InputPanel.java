@@ -17,7 +17,7 @@ public class InputPanel extends JPanel {
     BattleshipGame game;
     JSpinner spColumn;
     JSpinner spRow;
-    JButton submitButton;
+    JButton attackButton;
     JLabel turnAnnouncer;
     JLabel rowDescription;
     JLabel columnDescription;
@@ -39,9 +39,13 @@ public class InputPanel extends JPanel {
         add(turnAnnouncer);
         add(spColumn);
         add(spRow);
-        add(submitButton);
+        add(attackButton);
         add(rowDescription);
         add(columnDescription);
+
+        attackButton.addActionListener(e -> {
+            System.out.println(spRow.getValue());
+        });
     }
 
     private void modifyAnnouncer() {
@@ -60,10 +64,10 @@ public class InputPanel extends JPanel {
     }
 
     private void modifyAttackButton() {
-        submitButton = new JButton("Attack!");
-        submitButton.setBackground(new Color(59, 89, 182));
-        submitButton.setFont(fontCS);
-        submitButton.setBounds(250, 100, BUTTON_WIDTH, BUTTON_HEIGHT);
+        attackButton = new JButton("Attack!");
+        attackButton.setBackground(new Color(59, 89, 182));
+        attackButton.setFont(fontCS);
+        attackButton.setBounds(250, 100, BUTTON_WIDTH, BUTTON_HEIGHT);
     }
 
     private void modifyDescriptions() {
