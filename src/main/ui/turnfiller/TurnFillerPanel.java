@@ -1,17 +1,15 @@
 package ui.turnfiller;
 
 import model.BattleshipGame;
+import settings.ColorSet;
 import settings.Settings;
 import ui.App;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class TurnFillerPanel extends JPanel {
@@ -26,15 +24,15 @@ public class TurnFillerPanel extends JPanel {
         this.game = game;
         setLayout(null);
         setPreferredSize(new Dimension(Settings.FRAME_WIDTH, Settings.FRAME_HEIGHT));
-        setBackground(Settings.INPUT_BACKGROUND_COLOR);
+        setBackground(ColorSet.BACKGROUND);
 
         turnAnnouncer = new JLabel("Press NEXT to continue...");
-        turnAnnouncer.setFont(Settings.mainFontLarge);
+        turnAnnouncer.setFont(Settings.MAIN_FONT_LARGE);
         turnAnnouncer.setBounds(100, 400, 600, 100);
 
         button = new JButton("Next");
-        button.setFont(Settings.mainFont);
-        button.setBackground(Settings.BUTTON_COLOR);
+        button.setFont(Settings.MAIN_FONT);
+        button.setBackground(ColorSet.BUTTON);
         button.setBounds(250, 500, 100, 50);
         button.addActionListener(e -> {
             app.toGame();

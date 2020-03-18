@@ -18,9 +18,9 @@ public class Settings {
     // PANEL SETTINGS
 
     // FONTS
-    public static final Font mainFont = new Font("Comic Sans MS", Font.BOLD, 20);
-    public static final Font mainFontSmall = new Font("Comic Sans MS", Font.BOLD, 14);
-    public static final Font mainFontLarge = new Font("Comic Sans MS", Font.BOLD, 30);
+    public static final Font MAIN_FONT = new Font("Comic Sans MS", Font.BOLD, 20);
+    public static final Font MAIN_FONT_SMALL = new Font("Comic Sans MS", Font.BOLD, 14);
+    public static final Font MAIN_FONT_LARGE = new Font("Comic Sans MS", Font.BOLD, 30);
 
 
     // SAVED DATA
@@ -30,14 +30,8 @@ public class Settings {
     public static String IMAGE_MENU = "data/menubackground.png";
     public static String IMAGE_GAME = "data/gamebackground.png";
 
-    // COLORS
-    public static Color BUTTON_COLOR = new Color(59, 89, 182);
-    public static Color INPUT_BACKGROUND_COLOR = Color.GRAY;
-
-
     // Customizables by games
     public static int GRID_SIZE = 8;
-    public static int SHIP_DESTRUCTION_BONUS = 3;
     public List<Integer> defaultSizes = new ArrayList<>();
 
     public Settings() {

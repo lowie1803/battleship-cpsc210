@@ -37,8 +37,8 @@ public class ModePanel extends JPanel {
     }
 
     private void configureButtons() {
-        pvc.setFont(Settings.mainFont);
-        pvp.setFont(Settings.mainFont);
+        pvc.setFont(Settings.MAIN_FONT);
+        pvp.setFont(Settings.MAIN_FONT);
 
         pvc.setBounds(100, 400, 150, 50);
         pvp.setBounds(350, 400, 150, 50);

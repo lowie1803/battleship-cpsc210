@@ -28,7 +28,7 @@ public class MenuPanel extends JPanel {
         setLayout(null);
         startButton = new JButton("START GAME!");
         startButton.setBounds(200, 400, 200, 50);
-        startButton.setFont(Settings.mainFont);
+        startButton.setFont(Settings.MAIN_FONT);
         startButton.setBackground(Color.WHITE);
         startButton.addActionListener(e -> {
             app.toMode();
