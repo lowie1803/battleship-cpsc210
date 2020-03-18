@@ -28,7 +28,7 @@ public class ModePanel extends JPanel {
         }
         setLayout(null);
         pvc = new JButton("1 Player");
-        pvp = new JButton("2 Player");
+        pvp = new JButton("2 Players");
 
         configureButtons();
 

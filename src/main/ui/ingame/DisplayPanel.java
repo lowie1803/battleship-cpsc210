@@ -76,7 +76,6 @@ public class DisplayPanel extends JPanel {
     }
 
     private void drawShip(Graphics g, Ship s, int boardX, int boardY) {
-        //TODO: create image so it legitimately look like ships
         int cellSize = BOARD_PIXEL_SIZE / game.getGridSize();
         g.setColor(Color.ORANGE);
         for (Pair p: s.allCells()) {

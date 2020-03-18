@@ -42,7 +42,7 @@ public class Settings {
 
     public Settings() {
         defaultSizes.add(8);
-//        defaultSizes.add(3);
-//        defaultSizes.add(2);
+        defaultSizes.add(3);
+        defaultSizes.add(2);
     }
 }

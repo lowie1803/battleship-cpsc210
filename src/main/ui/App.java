@@ -112,7 +112,6 @@ public class App extends JFrame {
     }
 
     public enum PanelStatus {
-        //TODO: checklist for missing panels
         MENU, INGAME, CONCLUDE, TURNFILLER, MODE, CONFIG
     }
 }
