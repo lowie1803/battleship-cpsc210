@@ -6,14 +6,9 @@ import java.util.List;
 
 public class UITestPlayer extends Player {
     public UITestPlayer() {
-        addShip(new Ship(8, true, 1, 1));
+//        addShip(new Ship(8, true, 1, 1));
         addShip(new Ship(3, false, 3, 4));
         addShip(new Ship(2, true, 6, 6));
-    }
-
-    @Override
-    public boolean inGameMenu(int index) {
-        return false;
     }
 
     @Override

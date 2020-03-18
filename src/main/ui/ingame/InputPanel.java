@@ -1,7 +1,9 @@
-package ui;
+package ui.ingame;
 
 import model.BattleshipGame;
 import model.GameMode;
+import settings.Settings;
+import ui.App;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +15,7 @@ public class InputPanel extends JPanel {
     private static final int SPINNER_WIDTH = 50;
     private static final int BUTTON_HEIGHT = 30;
     private static final int BUTTON_WIDTH = 150;
+    App app;
 
     BattleshipGame game;
     JSpinner spColumn;
@@ -25,12 +28,39 @@ public class InputPanel extends JPanel {
     Font fontCS = new Font("Comic Sans MS", BOLD, 20);
     Font fontCSSmall = new Font("Comic Sans MS", Font.PLAIN, 16);
 
-    public InputPanel(BattleshipGame game) {
+    public InputPanel(BattleshipGame game, App app) {
+        this.app = app;
         this.game = game;
         setPreferredSize(new Dimension(600, 200));
-        setBackground(Color.GRAY);
+        setBackground(Settings.INPUT_BACKGROUND_COLOR);
         setLayout(null);
 
+        addContent();
+
+        attackButton.addActionListener(e -> {
+            try {
+                game.inflictAttack((int)(((String)spColumn.getValue()).charAt(0)) - (int)'0',
+                        (int)(((String)spRow.getValue()).charAt(0)) - (int)'A' + 1);
+                if (game.getGameMode() == GameMode.PVP) {
+                    app.toTurnFiller();
+                }
+            } catch (MoveAlreadyTakenException ex) {
+                JOptionPane.showMessageDialog(app, "You've already made this move",
+                        "Repeated Move", JOptionPane.WARNING_MESSAGE);
+            }
+            if (game.gameEnded()) {
+                app.toConclusion();
+            }
+        });
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        turnAnnouncer.setText(turnAnnouncement());
+    }
+
+    private void addContent() {
         modifyAnnouncer();
         modifySpinners();
         modifyAttackButton();
@@ -42,16 +72,6 @@ public class InputPanel extends JPanel {
         add(attackButton);
         add(rowDescription);
         add(columnDescription);
-
-        attackButton.addActionListener(e -> {
-            System.out.println(spRow.getValue());
-            try {
-                game.inflictAttack((int)(((String)spColumn.getValue()).charAt(0)) - (int)'0',
-                        (int)(((String)spRow.getValue()).charAt(0)) - (int)'A' + 1);
-            } catch (MoveAlreadyTakenException ex) {
-                System.out.println("Move already done!");
-            }
-        });
     }
 
     private void modifyAnnouncer() {
@@ -71,7 +91,7 @@ public class InputPanel extends JPanel {
 
     private void modifyAttackButton() {
         attackButton = new JButton("Attack!");
-        attackButton.setBackground(new Color(59, 89, 182));
+        attackButton.setBackground(Settings.BUTTON_COLOR);
         attackButton.setFont(fontCS);
         attackButton.setBounds(250, 100, BUTTON_WIDTH, BUTTON_HEIGHT);
     }
@@ -94,14 +114,19 @@ public class InputPanel extends JPanel {
     }
 
     private String turnAnnouncement() {
-        if (game.getGameMode() == GameMode.PVCE || game.getGameMode() == GameMode.PVCH) {
-            return "It's Your Turn!";
-        } else {
-            if (game.turn1()) {
-                return "Player 1's turn!";
+        try {
+            if (game.getGameMode() == GameMode.PVCE || game.getGameMode() == GameMode.PVCH) {
+                return "It's Your Turn!";
             } else {
-                return "Player 2's turn!";
+
+                if (game.turn1()) {
+                    return "Player 2's turn!";
+                } else {
+                    return "Player 1's turn!";
+                }
             }
+        } catch (NullPointerException e) {
+            return "";
         }
     }
 }

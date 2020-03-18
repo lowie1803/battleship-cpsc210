@@ -1,28 +1,46 @@
 package model;
 
+import javafx.util.Pair;
 import model.players.HumanPlayer;
 import model.players.Player;
 import model.players.RandomizedBot;
 import model.players.UITestPlayer;
-import persistence.Reader;
 import persistence.Writer;
 import settings.Settings;
-import ui.MoveAlreadyTakenException;
+import ui.ingame.MoveAlreadyTakenException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static model.GameMode.*;
+
 
 public class BattleshipGame {
     private Player[] player = {null, null};
     Settings settings = new Settings();
     private int gridSize;
-    private GameMode gameMode = GameMode.PVP;
+    private GameMode gameMode = PVCE;
     private boolean turnSwitch = false;
+    private ArrayList<Integer> listOfSizes;
 
     public BattleshipGame() {
         gridSize = Settings.GRID_SIZE;
+        listOfSizes = new ArrayList<>(settings.defaultSizes);
+    }
+
+    public void reset() {
+        if (gameMode == PVP) {
+            player[0] = new HumanPlayer();
+            player[1] = new HumanPlayer();
+        } else {
+            player[0] = new HumanPlayer();
+            player[1] = new RandomizedBot();
+        }
+        player[0].setOpponent(player[1]);
+        player[1].setOpponent(player[0]);
         initialGame();
     }
 
@@ -30,20 +48,8 @@ public class BattleshipGame {
     // EFFECTS: initiate a game, including letting players arrange the ships and randomize the arrangement for
     // the comp.
     private void initialGame() {
-        //TODO: remodify players after testing
-        player[0] = new UITestPlayer();
-        player[0].addAllShips(settings.defaultSizes);
-
-        //TODO: remodify players after testing
-        player[1] = new UITestPlayer();
-        player[1].addAllShips(settings.defaultSizes);
-
         player[0].setOpponent(player[1]);
         player[1].setOpponent(player[0]);
-
-        // TODO: Delete after testing
-//        player[0].attack(1, 1);
-//        player[0].attack(6, 5);
     }
 
     private Player currentPlayer() {
@@ -62,12 +68,43 @@ public class BattleshipGame {
 
         System.out.println("Gained " + pts + " points!");
 
-        if (gameMode == GameMode.PVP) {
-            turnSwitch = !turnSwitch;
+        if (gameMode == PVP) {
+            changeTurn();
         } else {
             player2().makeAnAttack();
         }
+    }
 
+    public boolean gameEnded() {
+        return (player[0].lostGame() || player[1].lostGame());
+    }
+
+    public String getWinner() {
+        if (player[0].lostGame()) {
+            return "2";
+        } else if (player[1].lostGame()) {
+            return "1";
+        } else {
+            return "0";
+        }
+    }
+
+    private void setGameMode(GameMode gameMode) {
+        this.gameMode = gameMode;
+    }
+
+    public void setPvPGameMode() {
+        this.gameMode = PVP;
+        player[0] = new HumanPlayer();
+        player[1] = new HumanPlayer();
+        initialGame();
+    }
+
+    public void setPvCGameMode() {
+        this.gameMode = GameMode.PVCE;
+        player[0] = new HumanPlayer();
+        player[1] = new RandomizedBot();
+        initialGame();
     }
 
     private void saveGameToFile() {
@@ -81,17 +118,6 @@ public class BattleshipGame {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-    }
-
-    private void concludeGame() {
-        if (player[0].lostGame()) {
-            System.out.println("Player 2 won!");
-        } else {
-            System.out.println("Player 1 won!");
-        }
-        System.out.println("The score is " + player[0].getPoints() + " - " + player[1].getPoints() + "\n\n");
-
-        clearSavedGame();
     }
 
     private void clearSavedGame() {
@@ -142,5 +168,7 @@ public class BattleshipGame {
         return player[1];
     }
 
-
+    public ArrayList<Integer> getListOfSizes() {
+        return listOfSizes;
+    }
 }

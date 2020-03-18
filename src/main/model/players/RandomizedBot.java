@@ -8,11 +8,6 @@ import java.util.List;
 import java.util.Random;
 
 public class RandomizedBot extends Player {
-    @Override
-    public boolean inGameMenu(int index) {
-        makeAnAttack();
-        return false;
-    }
 
     @Override
     public void makeAnAttack() {

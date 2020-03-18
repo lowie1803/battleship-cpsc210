@@ -8,24 +8,6 @@ public class HumanPlayer extends Player {
     Scanner input = new Scanner(System.in);
 
     @Override
-    public boolean inGameMenu(int index) {
-        Set<String> legalCommand = new HashSet<>();
-        legalCommand.add("a");
-        legalCommand.add("s");
-        legalCommand.add("q");
-        String command = stringCommandGetter(
-                "Type a to attack, or s to view current score, or q to quit and save...", legalCommand);
-        if (command.equals("a")) {
-            makeAnAttack();
-        } else if (command.equals("s")) {
-            System.out.println("Current score: " + getPoints() + " " + opponent.getPoints());
-        } else {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public void makeAnAttack() {
         System.out.println("Choose one grid to attack!\n(X first, Y follows)");
         int x = input.nextInt();

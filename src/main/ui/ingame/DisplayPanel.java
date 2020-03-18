@@ -1,4 +1,4 @@
-package ui;
+package ui.ingame;
 
 import javafx.util.Pair;
 import model.BattleshipGame;
@@ -6,27 +6,40 @@ import model.Move;
 import model.players.Player;
 import model.ship.Ship;
 import settings.Settings;
+import ui.App;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class DisplayPanel extends JPanel {
-    private static final int BOARD_Y = 100;
-    private static final int BOARD_X1 = 50;
-    private static final int BOARD_X2 = 350;
-    private static final int BOARD_PIXEL_SIZE = 200;
+    private static final int BOARD_Y = Settings.BOARD_Y;
+    private static final int BOARD_X1 = Settings.BOARD_X1;
+    private static final int BOARD_X2 = Settings.BOARD_X2;
+    private static final int BOARD_PIXEL_SIZE = Settings.BOARD_PIXEL_SIZE;
     BattleshipGame game;
+    App app;
+    BufferedImage background;
 
-    public DisplayPanel(BattleshipGame game) {
+    public DisplayPanel(BattleshipGame game, App app) {
+        this.app = app;
         this.game = game;
         setPreferredSize(new Dimension(Settings.FRAME_WIDTH, 400));
         setBackground(Color.BLUE);
+        try {
+            background = ImageIO.read(new File(Settings.IMAGE_GAME));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
+        g.drawImage(background, 0, 0, null);
         drawGame(g);
     }
 
