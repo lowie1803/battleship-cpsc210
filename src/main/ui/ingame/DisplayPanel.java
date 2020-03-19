@@ -1,6 +1,7 @@
 package ui.ingame;
 
 import model.BattleshipGame;
+import settings.ColorSet;
 import settings.Settings;
 import ui.App;
 import ui.drawer.ComponentDrawer;
@@ -11,6 +12,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
+import static settings.ColorSet.*;
 
 public class DisplayPanel extends JPanel {
     private static final int BOARD_Y = Settings.BOARD_Y;
@@ -44,10 +47,18 @@ public class DisplayPanel extends JPanel {
         ComponentDrawer.drawBoards(g, game.getGridSize());
         if (game.turn1()) {
             ComponentDrawer.drawPlayerShips(g, game.getGridSize(), game.player2(), BOARD_X2, BOARD_Y);
-            ComponentDrawer.drawPlayerMoves(g, game.getGridSize(), game.player2(), BOARD_X1, BOARD_Y);
+            ComponentDrawer.drawPlayerMoves(g, game.getGridSize(), game.player2(), BOARD_X1, BOARD_Y,
+                    SHOT_FOR_HIT, SHOT_FOR_MISSED);
+
+            ComponentDrawer.drawPlayerMoves(g, game.getGridSize(), game.player1(), BOARD_X2, BOARD_Y,
+                    SHOT_AGAINST_HIT, SHOT_AGAINST_MISSED);
         } else {
-            ComponentDrawer.drawPlayerMoves(g, game.getGridSize(), game.player1(), BOARD_X2, BOARD_Y);
             ComponentDrawer.drawPlayerShips(g, game.getGridSize(), game.player1(), BOARD_X1, BOARD_Y);
+            ComponentDrawer.drawPlayerMoves(g, game.getGridSize(), game.player1(), BOARD_X2, BOARD_Y,
+                    SHOT_FOR_HIT, SHOT_FOR_MISSED);
+
+            ComponentDrawer.drawPlayerMoves(g, game.getGridSize(), game.player2(), BOARD_X1, BOARD_Y,
+                    SHOT_AGAINST_HIT, SHOT_AGAINST_MISSED);
         }
     }
 }

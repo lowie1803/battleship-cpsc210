@@ -1,6 +1,7 @@
 package ui.mainmenu;
 
 import model.BattleshipGame;
+import settings.ColorSet;
 import settings.Settings;
 import ui.App;
 
