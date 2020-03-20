@@ -33,3 +33,22 @@ Stage 1:
 Stage 2:
 - As a user, I want to save the current game and load it when I need.
 - As a user, I want to clear data after I finished one game.
+
+Stage 3:
+
+**INSTRUCTION FOR GRADER
+
+- You can generate the first required event (Add "Ship" to your board "Player") by clicking 
+"START GAME", choose any mode, and then choose the coordinates and orientation for 
+your ship.
+
+- You can generate the second required event, which is just simply by playing the game 
+(Add "Move" to the opponent board "Player") after generating ships and start playing.
+
+- You can trigger my audio component by clicking almost any button in the game. And you can
+see my visual component in the background of either the menu or in game.
+
+- You can save the state of my application by the button "Save & Quit" after you start the
+game and before you finished the game.
+
+- You can reload the state of my application by the button "Load game in the main menu". 

@@ -89,9 +89,21 @@ public class InputPanel extends JPanel {
             JOptionPane.showMessageDialog(app, REPEATED_WARNING, "Repeated Move", JOptionPane.WARNING_MESSAGE);
         }
         if (game.gameEnded()) {
-            AudioSet.playVictory();
+            playConcludeAudioAccordingly();
             game.clearSavedGame();
             app.toConclusion();
+        }
+    }
+
+    void playConcludeAudioAccordingly() {
+        if (game.getGameMode() == GameMode.PVP) {
+            AudioSet.playVictory();
+        } else {
+            if (game.getWinner().equals("1")) {
+                AudioSet.playVictory();
+            } else {
+                AudioSet.playLoser();
+            }
         }
     }
 

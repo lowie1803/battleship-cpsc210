@@ -58,7 +58,6 @@ public class ConcludePanel extends JPanel {
         backToMenu.addActionListener(e -> {
             AudioSet.playButtonClick();
             app.toMenu();
-
         });
     }
 
