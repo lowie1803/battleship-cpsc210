@@ -60,19 +60,20 @@ public class BattleshipGame {
         }
     }
 
-    public void inflictAttack(int x, int y) throws MoveAlreadyTakenException {
+    public boolean inflictAttack(int x, int y) throws MoveAlreadyTakenException {
         int pts = currentPlayer().attack(x, y);
         if (pts == -1) {
             throw new MoveAlreadyTakenException();
         }
 
-        System.out.println("Gained " + pts + " points!");
+//        System.out.println("Gained " + pts + " points!");
 
         if (gameMode == PVP) {
             changeTurn();
         } else {
             player2().makeAnAttack();
         }
+        return (pts > 0);
     }
 
     public boolean gameEnded() {

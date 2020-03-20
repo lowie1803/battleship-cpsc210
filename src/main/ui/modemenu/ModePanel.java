@@ -1,6 +1,7 @@
 package ui.modemenu;
 
 import model.BattleshipGame;
+import settings.AudioSet;
 import settings.Settings;
 import ui.App;
 
@@ -44,12 +45,14 @@ public class ModePanel extends JPanel {
         pvp.setBounds(350, 400, 150, 50);
 
         pvc.addActionListener(e -> {
+            AudioSet.playButtonClick();
             game.setPvCGameMode();
             game.reset();
             app.toConfigPanel();
         });
 
         pvp.addActionListener(e -> {
+            AudioSet.playButtonClick();
             game.setPvPGameMode();
             game.reset();
             app.toConfigPanel();

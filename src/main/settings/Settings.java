@@ -31,11 +31,11 @@ public class Settings {
     public static String IMAGE_GAME = "data/gamebackground.png";
 
     // Customizables by games
-    public static int GRID_SIZE = 8;
+    public static int GRID_SIZE = 6;
     public List<Integer> defaultSizes = new ArrayList<>();
 
     public Settings() {
-        defaultSizes.add(8);
+        defaultSizes.add(5);
         defaultSizes.add(3);
         defaultSizes.add(2);
     }

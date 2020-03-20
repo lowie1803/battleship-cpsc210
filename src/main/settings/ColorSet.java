@@ -14,4 +14,5 @@ public class ColorSet {
     public static final Color SHOT_FOR_MISSED = Color.RED;
     public static final Color SHOT_AGAINST_HIT = Color.BLACK;
     public static final Color SHOT_AGAINST_MISSED = Color.LIGHT_GRAY;
+    public static final Color ANNOUNCER = new Color(128, 0, 64);
 }

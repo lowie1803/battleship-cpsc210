@@ -2,6 +2,7 @@ package ui.ingame;
 
 import model.BattleshipGame;
 import model.GameMode;
+import settings.AudioSet;
 import settings.ColorSet;
 //import settings.Settings.*;
 import ui.App;
@@ -39,20 +40,33 @@ public class InputPanel extends JPanel {
         addContent();
 
         attackButton.addActionListener(e -> {
-            try {
-                game.inflictAttack((int)(((String)spColumn.getValue()).charAt(0)) - (int)'0',
-                        (int)(((String)spRow.getValue()).charAt(0)) - (int)'A' + 1);
-                if (game.getGameMode() == GameMode.PVP) {
-                    app.toTurnFiller();
-                }
-            } catch (MoveAlreadyTakenException ex) {
-                JOptionPane.showMessageDialog(app, "You've already made this move",
-                        "Repeated Move", JOptionPane.WARNING_MESSAGE);
-            }
-            if (game.gameEnded()) {
-                app.toConclusion();
-            }
+            buttonAction();
         });
+    }
+
+    private void buttonAction() {
+        try {
+            boolean hit = game.inflictAttack((int)(((String)spColumn.getValue()).charAt(0)) - (int)'0',
+                    (int)(((String)spRow.getValue()).charAt(0)) - (int)'A' + 1);
+            if (hit) {
+                AudioSet.playHit();
+                JOptionPane.showMessageDialog(app, "Your shot is hit! :D", "HIT", JOptionPane.PLAIN_MESSAGE);
+            } else {
+                AudioSet.playMiss();
+                JOptionPane.showMessageDialog(app, "Your shot is missed! :(", "MISSED", JOptionPane.PLAIN_MESSAGE);
+            }
+            if (game.getGameMode() == GameMode.PVP) {
+                app.toTurnFiller();
+            }
+        } catch (MoveAlreadyTakenException ex) {
+            AudioSet.playError();
+            JOptionPane.showMessageDialog(app, "You've already made this move",
+                    "Repeated Move", JOptionPane.WARNING_MESSAGE);
+        }
+        if (game.gameEnded()) {
+            AudioSet.playVictory();
+            app.toConclusion();
+        }
     }
 
     @Override
@@ -78,6 +92,7 @@ public class InputPanel extends JPanel {
     private void modifyAnnouncer() {
         turnAnnouncer = new JLabel(turnAnnouncement());
         turnAnnouncer.setFont(MAIN_FONT);
+        turnAnnouncer.setForeground(ColorSet.ANNOUNCER);
         turnAnnouncer.setBounds(15, 15, 600, 30);
     }
 

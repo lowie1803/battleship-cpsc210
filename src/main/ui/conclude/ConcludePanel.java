@@ -5,6 +5,7 @@ import model.BattleshipGame;
 import model.GameMode;
 import model.players.Player;
 import model.ship.Ship;
+import settings.AudioSet;
 import settings.ColorSet;
 import settings.Settings;
 import ui.App;
@@ -55,6 +56,7 @@ public class ConcludePanel extends JPanel {
         add(winnerAnnouncer);
         add(backToMenu);
         backToMenu.addActionListener(e -> {
+            AudioSet.playButtonClick();
             app.toMenu();
         });
     }

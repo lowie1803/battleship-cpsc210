@@ -4,6 +4,7 @@ import model.BattleshipGame;
 import model.GameMode;
 import model.players.Player;
 import model.ship.Ship;
+import settings.AudioSet;
 import settings.ColorSet;
 import settings.Settings;
 import ui.App;
@@ -92,8 +93,10 @@ public class ConfigPanel extends JPanel {
                 (int)((String)spColumn.getValue()).charAt(0) - (int)'0',
                 (int)((String)spRow.getValue()).charAt(0) - (int)'A' + 1));
         if (!addable) {
+            AudioSet.playError();
             JOptionPane.showMessageDialog(app, CONFLICT_MESSAGE,"Conflicted", JOptionPane.ERROR_MESSAGE);
         } else {
+            AudioSet.playAddShip();
             index++;
             if ((index == game.getListOfSizes().size() && game.getGameMode() != GameMode.PVP)
                     || (index == game.getListOfSizes().size() * 2)) {
@@ -121,6 +124,7 @@ public class ConfigPanel extends JPanel {
     private void spinnersReset() {
         spColumn.setValue("1");
         spRow.setValue("A");
+        spOrientation.setValue("Horizontal");
     }
 
     private void modifyLabels() {

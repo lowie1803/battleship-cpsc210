@@ -1,6 +1,7 @@
 package ui.mainmenu;
 
 import model.BattleshipGame;
+import settings.AudioSet;
 import settings.ColorSet;
 import settings.Settings;
 import ui.App;
@@ -32,8 +33,9 @@ public class MenuPanel extends JPanel {
         startButton.setFont(Settings.MAIN_FONT);
         startButton.setBackground(Color.WHITE);
         startButton.addActionListener(e -> {
+            AudioSet.playButtonClick();
+//            AudioSet.playMiss();
             app.toMode();
-//            System.out.println("I'm here");
         });
         add(startButton);
         try {
