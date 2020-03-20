@@ -54,14 +54,17 @@ public class MenuPanel extends JPanel {
         loadButton.setBounds(50, 425, 200, 50);
         loadButton.setFont(Settings.MAIN_FONT);
         loadButton.setBackground(ColorSet.BUTTON);
+        toggleLoad(app.getLoadable());
         loadButton.addActionListener(e -> {
             AudioSet.playButtonClick();
             try {
                 Reader.readGame(game, new File(Settings.SAVED_GAMES_DATA));
-            } catch (IOException ex) {
-                loadButton.setEnabled(false);
+                app.toGame();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(app, "Nothing to load!", "", JOptionPane.WARNING_MESSAGE);
+                app.setLoadable(false);
+                toggleLoad(false);
             }
-            app.toGame();
         });
     }
 
@@ -117,9 +120,14 @@ public class MenuPanel extends JPanel {
         add(loadButton);
     }
 
+    public void toggleLoad(boolean b) {
+        loadButton.setEnabled(b);
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(background, 0, 0, null);
+        toggleLoad(app.getLoadable());
     }
 }

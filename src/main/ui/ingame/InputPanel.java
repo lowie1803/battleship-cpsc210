@@ -22,6 +22,10 @@ public class InputPanel extends JPanel {
     private static final int SPINNER_WIDTH = 50;
     private static final int BUTTON_HEIGHT = 30;
     private static final int BUTTON_WIDTH = 120;
+    private static final String HIT_ANNOUNCEMENT = "Your shot is hit! :D";
+    private static final String MISSED_ANNOUNCEMENT = "Your shot didn't hit anything! :(";
+    private static final String REPEATED_WARNING = "You've already made this move";
+
     App app;
 
     BattleshipGame game;
@@ -55,6 +59,7 @@ public class InputPanel extends JPanel {
             writer = new Writer(new File("data/saved.txt"));
             writer.write(game);
             writer.close();
+            app.setLoadable(true);
             app.toMenu();
         } catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(app, "data/saved.txt not found!", "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -69,24 +74,23 @@ public class InputPanel extends JPanel {
         try {
             Move hit = game.inflictAttack((int)(((String)spColumn.getValue()).charAt(0)) - (int)'0',
                     (int)(((String)spRow.getValue()).charAt(0)) - (int)'A' + 1);
-            if (hit.getStatus() == Move.Status.HIT) {
-                AudioSet.playHit();
-                JOptionPane.showMessageDialog(app, "Your shot is hit! :D", "HIT", JOptionPane.PLAIN_MESSAGE);
-            } else if (hit.getStatus() == Move.Status.MISS) {
-                AudioSet.playMiss();
-                JOptionPane.showMessageDialog(app, "Your shot didn't hit anything! :(",
-                        "MISSED", JOptionPane.PLAIN_MESSAGE);
-            }
             if (game.getGameMode() == GameMode.PVP) {
                 app.toTurnFiller();
             }
+            if (hit.getStatus() == Move.Status.HIT) {
+                AudioSet.playHit();
+                JOptionPane.showMessageDialog(app, HIT_ANNOUNCEMENT, "HIT", JOptionPane.PLAIN_MESSAGE);
+            } else if (hit.getStatus() == Move.Status.MISS) {
+                AudioSet.playMiss();
+                JOptionPane.showMessageDialog(app, MISSED_ANNOUNCEMENT, "MISSED", JOptionPane.PLAIN_MESSAGE);
+            }
         } catch (MoveAlreadyTakenException ex) {
             AudioSet.playError();
-            JOptionPane.showMessageDialog(app, "You've already made this move",
-                    "Repeated Move", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(app, REPEATED_WARNING, "Repeated Move", JOptionPane.WARNING_MESSAGE);
         }
         if (game.gameEnded()) {
             AudioSet.playVictory();
+            game.clearSavedGame();
             app.toConclusion();
         }
     }

@@ -1,10 +1,8 @@
 package model;
 
-import javafx.util.Pair;
 import model.players.HumanPlayer;
 import model.players.Player;
 import model.players.RandomizedBot;
-import model.players.UITestPlayer;
 import persistence.Reader;
 import persistence.Saveable;
 import persistence.Writer;
@@ -12,11 +10,8 @@ import settings.Settings;
 import ui.ingame.MoveAlreadyTakenException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.List;
 
 import static model.GameMode.*;
 
@@ -86,10 +81,10 @@ public class BattleshipGame implements Saveable {
     }
 
     public String getWinner() {
-        if (player[0].lostGame()) {
-            return "2";
-        } else if (player[1].lostGame()) {
+        if (player[1].lostGame()) {
             return "1";
+        } else if (player[0].lostGame()) {
+            return "2";
         } else {
             return "0";
         }
@@ -113,16 +108,13 @@ public class BattleshipGame implements Saveable {
         initialGame();
     }
 
-    private void clearSavedGame() {
+    public void clearSavedGame() {
         Writer writer;
         try {
             writer = new Writer(new File(Settings.SAVED_GAMES_DATA));
             writer.close();
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            System.out.println("Do something!");
         }
     }
 

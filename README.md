@@ -31,5 +31,5 @@ Stage 1:
 - As a user, I want the game to end after any player wins the game.
 
 Stage 2:
-- As a user, I want to save the current game.
-- As a user, I want to keep the results of past games. 
+- As a user, I want to save the current game and load it when I need.
+- As a user, I want to clear data after I finished one game.

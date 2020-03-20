@@ -58,6 +58,7 @@ public class ConcludePanel extends JPanel {
         backToMenu.addActionListener(e -> {
             AudioSet.playButtonClick();
             app.toMenu();
+
         });
     }
 
@@ -79,6 +80,7 @@ public class ConcludePanel extends JPanel {
         g.drawImage(backgroundImage, 0, 0, null);
         winnerAnnouncer.setText(winnerAnnouncement());
         drawGame(g);
+
     }
 
     private void drawGame(Graphics g) {

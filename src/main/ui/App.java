@@ -23,6 +23,7 @@ public class App extends JFrame {
     ModePanel modePanel;
     TurnFillerPanel turnFillerPanel;
     ConfigPanel configPanel;
+    boolean loadable = true;
 
     BattleshipGame battleshipGame;
     static PanelStatus panelStatus;
@@ -109,6 +110,14 @@ public class App extends JFrame {
         setContentPane(configPanel);
         revalidate();
         setPanelStatus(PanelStatus.CONFIG);
+    }
+
+    public boolean getLoadable() {
+        return loadable;
+    }
+
+    public void setLoadable(boolean b) {
+        loadable = b;
     }
 
     public enum PanelStatus {

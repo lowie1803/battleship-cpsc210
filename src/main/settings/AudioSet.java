@@ -69,6 +69,4 @@ public class AudioSet {
     public static void playVictory() {
         playAudio("data/soundfx/victory.wav");
     }
-
-
 }
