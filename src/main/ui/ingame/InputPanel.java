@@ -2,6 +2,7 @@ package ui.ingame;
 
 import model.BattleshipGame;
 import model.GameMode;
+import persistence.Writer;
 import settings.AudioSet;
 import settings.ColorSet;
 //import settings.Settings.*;
@@ -9,21 +10,24 @@ import ui.App;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 
-import static java.awt.Font.BOLD;
 import static settings.Settings.*;
 
 public class InputPanel extends JPanel {
     private static final int SPINNER_HEIGHT = 30;
     private static final int SPINNER_WIDTH = 50;
     private static final int BUTTON_HEIGHT = 30;
-    private static final int BUTTON_WIDTH = 150;
+    private static final int BUTTON_WIDTH = 120;
     App app;
 
     BattleshipGame game;
     JSpinner spColumn;
     JSpinner spRow;
     JButton attackButton;
+    JButton saveButton;
     JLabel turnAnnouncer;
     JLabel rowDescription;
     JLabel columnDescription;
@@ -38,13 +42,29 @@ public class InputPanel extends JPanel {
         setFont(MAIN_FONT);
 
         addContent();
-
-        attackButton.addActionListener(e -> {
-            buttonAction();
+        attackButton.addActionListener(e -> attackButtonAction());
+        saveButton.addActionListener(e -> {
+            saveButtonAction();
         });
     }
 
-    private void buttonAction() {
+    private void saveButtonAction() {
+        Writer writer;
+        try {
+            writer = new Writer(new File("data/saved.txt"));
+            writer.write(game);
+            writer.close();
+            app.toMenu();
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(app, "data/saved.txt not found!", "ERROR", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        } catch (UnsupportedEncodingException ex) {
+            JOptionPane.showMessageDialog(app, "Cannot save file!", "ERROR", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+
+    private void attackButtonAction() {
         try {
             boolean hit = game.inflictAttack((int)(((String)spColumn.getValue()).charAt(0)) - (int)'0',
                     (int)(((String)spRow.getValue()).charAt(0)) - (int)'A' + 1);
@@ -79,6 +99,7 @@ public class InputPanel extends JPanel {
         modifyAnnouncer();
         modifySpinners();
         modifyAttackButton();
+        modifySaveButton();
         modifyDescriptions();
 
         add(turnAnnouncer);
@@ -87,6 +108,14 @@ public class InputPanel extends JPanel {
         add(attackButton);
         add(rowDescription);
         add(columnDescription);
+        add(saveButton);
+    }
+
+    private void modifySaveButton() {
+        saveButton = new JButton("Save & Quit");
+        saveButton.setBackground(ColorSet.BUTTON);
+        saveButton.setFont(MAIN_FONT_SMALL);
+        saveButton.setBounds(400, 100, BUTTON_WIDTH, BUTTON_HEIGHT);
     }
 
     private void modifyAnnouncer() {

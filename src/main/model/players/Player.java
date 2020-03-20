@@ -15,7 +15,6 @@ public abstract class Player implements Saveable {
     Player opponent;
     private int gridSize;
     private List<Ship> ships;
-//    private int points;
     private List<Move> moves;
 
     public Player() {
@@ -164,10 +163,6 @@ public abstract class Player implements Saveable {
     // EFFECTS: save data of this player to
     @Override
     public void save(PrintWriter printWriter) {
-        printWriter.print(gridSize);
-        printWriter.print(Reader.DELIMITER);
-        printWriter.print(getPoints());
-        printWriter.print(Reader.DELIMITER);
         printWriter.print(ships.size());
         printWriter.print(Reader.DELIMITER);
         for (Ship ship: ships) {
@@ -181,6 +176,5 @@ public abstract class Player implements Saveable {
             printWriter.print(i.getYCoordinate());
             printWriter.print(Reader.DELIMITER);
         }
-        printWriter.println();
     }
 }

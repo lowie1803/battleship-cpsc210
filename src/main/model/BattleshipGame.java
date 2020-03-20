@@ -5,12 +5,15 @@ import model.players.HumanPlayer;
 import model.players.Player;
 import model.players.RandomizedBot;
 import model.players.UITestPlayer;
+import persistence.Reader;
+import persistence.Saveable;
 import persistence.Writer;
 import settings.Settings;
 import ui.ingame.MoveAlreadyTakenException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +21,7 @@ import java.util.List;
 import static model.GameMode.*;
 
 
-public class BattleshipGame {
+public class BattleshipGame implements Saveable {
     private Player[] player = {null, null};
     Settings settings = new Settings();
     private int gridSize;
@@ -171,5 +174,24 @@ public class BattleshipGame {
 
     public ArrayList<Integer> getListOfSizes() {
         return listOfSizes;
+    }
+
+    @Override
+    public void save(PrintWriter printWriter) {
+        printWriter.print(gridSize);
+        printWriter.print(Reader.DELIMITER);
+//        printWriter.print();
+        if (gameMode == PVP) {
+            printWriter.print(0);
+        } else if (gameMode == PVCE) {
+            printWriter.print(1);
+        } else if (gameMode == PVCH) {
+            printWriter.print(2);
+        }
+        printWriter.print(Reader.DELIMITER);
+        printWriter.print(turnSwitch);
+        printWriter.print(Reader.DELIMITER);
+        player[0].save(printWriter);
+        player[1].save(printWriter);
     }
 }
