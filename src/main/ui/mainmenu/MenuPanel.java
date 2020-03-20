@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import persistence.Reader;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.System.exit;
@@ -55,7 +56,12 @@ public class MenuPanel extends JPanel {
         loadButton.setBackground(ColorSet.BUTTON);
         loadButton.addActionListener(e -> {
             AudioSet.playButtonClick();
-            //TODO: implement load to game
+            try {
+                Reader.readGame(game, new File(Settings.SAVED_GAMES_DATA));
+            } catch (IOException ex) {
+                loadButton.setEnabled(false);
+            }
+            app.toGame();
         });
     }
 
@@ -108,6 +114,7 @@ public class MenuPanel extends JPanel {
         add(quitButton);
         add(instructionButton);
         add(aboutButton);
+        add(loadButton);
     }
 
     @Override

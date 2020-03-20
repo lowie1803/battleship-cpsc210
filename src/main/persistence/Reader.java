@@ -1,9 +1,8 @@
 package persistence;
 
+import model.BattleshipGame;
 import model.Move;
-import model.players.HumanPlayer;
 import model.players.Player;
-import model.players.RandomizedBot;
 import model.ship.Ship;
 
 import java.io.File;
@@ -15,29 +14,73 @@ import java.util.List;
 
 public class Reader {
     public static final String DELIMITER = ",";
+    static int ptr = 0;
 
-    public static Player[] readPlayers(File file) throws IOException {
-        List<String> fileContent = readFile(file);
-        return parseContent(fileContent);
-    }
-
-    // EFFECTS: returns content of file as a list of strings, each string
-    // containing the content of one row of the file
+    // EFFECTS: returns content of file as a list of strings
     private static List<String> readFile(File file) throws IOException {
         return Files.readAllLines(file.toPath());
     }
 
+    public static void readGame(BattleshipGame game, File file) throws IOException {
+        List<String> fileContent = readFile(file);
+        parseContent(game, fileContent);
+    }
+
     // EFFECTS: returns a list of accounts parsed from list of strings
     // where each string contains data for one account
-    private static Player[] parseContent(List<String> fileContent) {
-        // TODO: customize this so that there are PvP mode and PvC mode
-        Player[] players = {new HumanPlayer(), new RandomizedBot()};
+    private static void parseContent(BattleshipGame game, List<String> fileContent) {
+//        BattleshipGame game = new BattleshipGame();
         ArrayList<String> lineComponents = splitString(fileContent.get(0));
-        parsePlayer(lineComponents, players[0]);
+        parseGame(game, lineComponents);
+//        return game;
+    }
 
-        lineComponents = splitString(fileContent.get(1));
-        parsePlayer(lineComponents, players[1]);
-        return players;
+    private static void parseGame(BattleshipGame game, ArrayList<String> lineComponents) {
+        game.setSize(Integer.parseInt(lineComponents.get(0)));
+
+        if (lineComponents.get(1).equals("PVP")) {
+            game.setPvPGameMode();
+        } else if (lineComponents.get(1).equals("PVCE")) {
+//            System.out.println(lineComponents.get(1));
+            game.setPvCGameMode();
+        }
+        if (Boolean.parseBoolean(lineComponents.get(2))) {
+            game.changeTurn();
+        }
+        ptr = 3;
+        parsePlayer(game.player1(), lineComponents);
+//        ptr++;
+        parsePlayer(game.player2(), lineComponents);
+//        System.out.println(game.player1().getAllShips().size());
+    }
+
+    private static void parsePlayer(Player p, ArrayList<String> lineComponents) {
+        int shipCount = Integer.parseInt(lineComponents.get(ptr));
+        ptr++;
+        for (int i = 0; i < shipCount; i++) {
+            p.addShip(parseShip(lineComponents.subList(ptr, ptr + 5)));
+            ptr += 5;
+        }
+        int moveCount = Integer.parseInt(lineComponents.get(ptr));
+        ptr++;
+        for (int i = 0; i < moveCount; i++) {
+            p.addMove(parseMove(lineComponents.subList(ptr, ptr + 3)));
+            ptr += 3;
+        }
+    }
+
+    private static Move parseMove(List<String> components) {
+        String status = components.get(2);
+        int x = Integer.parseInt(components.get(0));
+        int y = Integer.parseInt(components.get(1));
+        if (status.equals("HIT")) {
+            return new Move(x, y, Move.Status.HIT);
+        } else if (status.equals("MISS")) {
+            return new Move(x, y, Move.Status.MISS);
+        } else {
+            return new Move(x, y, Move.Status.BOMBED);
+        }
+//        return new Move(x, y, status);
     }
 
     // EFFECTS: returns a list of strings obtained by splitting line on DELIMITER
@@ -46,44 +89,20 @@ public class Reader {
         return new ArrayList<>(Arrays.asList(splits));
     }
 
-    // REQUIRES: components must be in a right format. Which means:
-    // - starts with an int, which is the size of the grid
-    // - follows by an int, which is the number of current points
-    // - follows by an int, which is the number of ships. Let's set this to n
-    // - follows by 5*n strings, which is the infos of n ships
-    // - follows by an int, which is the number of moves made. Let's set this to m
-    // - follows by 2*m ints, denotes infos of m moves.
-    private static void parsePlayer(List<String> components, Player player) {
-        player.setGridSize(Integer.parseInt(components.get(0)));
-//        player.setPoints(Integer.parseInt(components.get(1)));
-        int shipCount = Integer.parseInt(components.get(2));
 
-        int currentIndex = 3;
-        for (int i = 0; i < shipCount; i++) {
-            player.addShip(parseShip(components.subList(currentIndex, currentIndex + 5)));
-            currentIndex += 5;
-        }
-
-        int moveCount = Integer.parseInt(components.get(currentIndex));
-        currentIndex++;
-        for (int i = 0; i < moveCount; i++) {
-            // TODO: Reader bug #1
-            player.addMove(Integer.parseInt(components.get(currentIndex)),
-                    Integer.parseInt(components.get(currentIndex + 1)), Move.Status.HIT);
-            currentIndex += 2;
-        }
-//        return player;
-    }
-
-    // REQUIRES: components has size 5, with first string is an int, follows by a boolean, then 2 ints, then a boolean
+    // REQUIRES: components has size 5, with first string is an int, follows by a boolean, then 2 ints, then an int
     // EFFECTS: returns a ship that parsed from components
     private static Ship parseShip(List<String> components) {
+//        System.out.println(ptr);
         Ship ship = new Ship(Integer.parseInt(components.get(0)),
                 Boolean.parseBoolean(components.get(1)),
                 Integer.parseInt(components.get(2)),
                 Integer.parseInt(components.get(3)));
-        // TODO: Reader Bug 2
-        ship.setDestroyed(); //
+        int destroyed = Integer.parseInt(components.get(4));
+        for (int i = 0; i < destroyed; i++) {
+            ship.setDestroyed();
+        }
+//        System.out.println(ship);
         return ship;
     }
 

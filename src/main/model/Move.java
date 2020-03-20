@@ -34,11 +34,7 @@ public class Move implements Saveable {
         printWriter.print(Reader.DELIMITER);
         printWriter.print(yc);
         printWriter.print(Reader.DELIMITER);
-        if (status == Status.MISS) {
-            printWriter.print(0);
-        } else {
-            printWriter.print(1);
-        }
+        printWriter.print(status);
         printWriter.print(Reader.DELIMITER);
     }
 

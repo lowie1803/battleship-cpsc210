@@ -2,6 +2,7 @@ package ui.ingame;
 
 import model.BattleshipGame;
 import model.GameMode;
+import model.Move;
 import persistence.Writer;
 import settings.AudioSet;
 import settings.ColorSet;
@@ -66,14 +67,15 @@ public class InputPanel extends JPanel {
 
     private void attackButtonAction() {
         try {
-            boolean hit = game.inflictAttack((int)(((String)spColumn.getValue()).charAt(0)) - (int)'0',
+            Move hit = game.inflictAttack((int)(((String)spColumn.getValue()).charAt(0)) - (int)'0',
                     (int)(((String)spRow.getValue()).charAt(0)) - (int)'A' + 1);
-            if (hit) {
+            if (hit.getStatus() == Move.Status.HIT) {
                 AudioSet.playHit();
                 JOptionPane.showMessageDialog(app, "Your shot is hit! :D", "HIT", JOptionPane.PLAIN_MESSAGE);
-            } else {
+            } else if (hit.getStatus() == Move.Status.MISS) {
                 AudioSet.playMiss();
-                JOptionPane.showMessageDialog(app, "Your shot is missed! :(", "MISSED", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(app, "Your shot didn't hit anything! :(",
+                        "MISSED", JOptionPane.PLAIN_MESSAGE);
             }
             if (game.getGameMode() == GameMode.PVP) {
                 app.toTurnFiller();

@@ -53,6 +53,7 @@ public class BattleshipGame implements Saveable {
     private void initialGame() {
         player[0].setOpponent(player[1]);
         player[1].setOpponent(player[0]);
+        turnSwitch = false;
     }
 
     private Player currentPlayer() {
@@ -63,20 +64,21 @@ public class BattleshipGame implements Saveable {
         }
     }
 
-    public boolean inflictAttack(int x, int y) throws MoveAlreadyTakenException {
+    public Move inflictAttack(int x, int y) throws MoveAlreadyTakenException {
         int pts = currentPlayer().attack(x, y);
         if (pts == -1) {
             throw new MoveAlreadyTakenException();
         }
 
-//        System.out.println("Gained " + pts + " points!");
+        Move ret = currentPlayer().latestMove();
 
         if (gameMode == PVP) {
             changeTurn();
         } else {
             player2().makeAnAttack();
         }
-        return (pts > 0);
+        return ret;
+
     }
 
     public boolean gameEnded() {
@@ -111,19 +113,6 @@ public class BattleshipGame implements Saveable {
         initialGame();
     }
 
-    private void saveGameToFile() {
-        try {
-            Writer writer = new Writer(new File(Settings.SAVED_GAMES_DATA));
-            writer.write(player[0]);
-            writer.write(player[1]);
-            writer.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("Unable to save game... Game deleted!");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void clearSavedGame() {
         Writer writer;
         try {
@@ -137,18 +126,9 @@ public class BattleshipGame implements Saveable {
         }
     }
 
-    private void loadGame() {
-//        try {
-//            player = Reader.readPlayers(new File(Settings.SAVED_GAMES_DATA));
-//            runGame();
-//        } catch (IOException e) {
-////            System.out.println("Error: no saved games.");
-//        }
-    }
-
     // MODIFIES: this
     // EFFECT: Change the value of turnSwitch
-    private void changeTurn() {
+    public void changeTurn() {
         turnSwitch = !turnSwitch;
     }
 
@@ -177,21 +157,24 @@ public class BattleshipGame implements Saveable {
     }
 
     @Override
+    // EFFECTS: save the info of the game by the following format:
+    // - first object is int = size of the grids
+    // - second object is int denotes the enumeration of the game mode
+    // - third object is boolean, denotes whose turn is it currently
+    // - followed by some objects which is the infos of player 1
+    // - followed by some objects which is the infos of player 2
     public void save(PrintWriter printWriter) {
         printWriter.print(gridSize);
         printWriter.print(Reader.DELIMITER);
-//        printWriter.print();
-        if (gameMode == PVP) {
-            printWriter.print(0);
-        } else if (gameMode == PVCE) {
-            printWriter.print(1);
-        } else if (gameMode == PVCH) {
-            printWriter.print(2);
-        }
+        printWriter.print(gameMode);
         printWriter.print(Reader.DELIMITER);
         printWriter.print(turnSwitch);
         printWriter.print(Reader.DELIMITER);
         player[0].save(printWriter);
         player[1].save(printWriter);
+    }
+
+    public void setSize(int parseInt) {
+        gridSize = parseInt;
     }
 }

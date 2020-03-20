@@ -150,10 +150,8 @@ public abstract class Player implements Saveable {
         return new ArrayList<>(this.ships);
     }
 
-    // MODIFIES: this
-    // EFFECTS: modifier used for testing only
-    public void addMove(int x, int y, Move.Status status) {
-        moves.add(new Move(x, y, status));
+    public void addMove(Move move) {
+        moves.add(move);
     }
 
     public List<Move> getMoves() {
@@ -177,4 +175,6 @@ public abstract class Player implements Saveable {
             printWriter.print(Reader.DELIMITER);
         }
     }
+
+
 }

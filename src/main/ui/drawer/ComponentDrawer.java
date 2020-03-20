@@ -27,6 +27,7 @@ public class ComponentDrawer {
     }
 
     public static void drawPlayerShips(Graphics g, int gridSize, Player player, int boardX, int boardY) {
+//        System.out.println(player);
         for (Ship s: player.getAllShips()) {
             drawShip(g, gridSize, s, boardX, boardY);
         }
