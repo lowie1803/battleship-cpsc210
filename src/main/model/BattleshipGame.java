@@ -17,6 +17,7 @@ import static model.GameMode.*;
 
 
 public class BattleshipGame implements Saveable {
+    // TODO: Change the game so that a player can gain a bonus turn after his/her shot was hit
     private Player[] player = {null, null};
     Settings settings = new Settings();
     private int gridSize;

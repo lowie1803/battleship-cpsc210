@@ -18,9 +18,9 @@ public class Settings {
     // PANEL SETTINGS
 
     // FONTS
-    public static final Font MAIN_FONT = new Font("Comic Sans MS", Font.BOLD, 20);
-    public static final Font MAIN_FONT_SMALL = new Font("Comic Sans MS", Font.BOLD, 14);
-    public static final Font MAIN_FONT_LARGE = new Font("Comic Sans MS", Font.BOLD, 30);
+    public static final Font MAIN_FONT = new Font("Falstin", Font.BOLD, 20);
+    public static final Font MAIN_FONT_SMALL = new Font("Falstin", Font.BOLD, 14);
+    public static final Font MAIN_FONT_LARGE = new Font("Falstin", Font.BOLD, 30);
 
 
     // SAVED DATA

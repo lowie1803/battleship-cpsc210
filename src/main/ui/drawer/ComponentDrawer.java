@@ -29,13 +29,13 @@ public class ComponentDrawer {
     public static void drawPlayerShips(Graphics g, int gridSize, Player player, int boardX, int boardY) {
 //        System.out.println(player);
         for (Ship s: player.getAllShips()) {
-            drawShip(g, gridSize, s, boardX, boardY);
+            drawShip(g, gridSize, s, boardX, boardY, ColorSet.SHIP);
         }
     }
 
-    public static void drawShip(Graphics g, int gridSize, Ship s, int boardX, int boardY) {
+    public static void drawShip(Graphics g, int gridSize, Ship s, int boardX, int boardY, Color color) {
         int cellSize = BOARD_PIXEL_SIZE / gridSize;
-        g.setColor(ColorSet.SHIP);
+        g.setColor(color);
         for (Pair p: s.allCells()) {
             g.fillOval(boardX + ((int)p.getKey() - 1) * cellSize,
                     boardY + ((int)p.getValue() - 1) * cellSize, cellSize, cellSize);

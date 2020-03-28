@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GamePanel extends JPanel {
+    // TODO: implement thinking Panel for bot
     BattleshipGame game;
     DisplayPanel displayPanel;
     InputPanel inputPanel;

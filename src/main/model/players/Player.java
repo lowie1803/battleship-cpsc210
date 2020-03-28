@@ -34,9 +34,7 @@ public abstract class Player implements Saveable {
 
     public abstract Ship generateOneShip(int size);
 
-    // MODIFIES: this
-    // EFFECTS: add ship to the ship set
-    public boolean addShip(Ship ship) {
+    public boolean ableToAddShip(Ship ship) {
         List<Pair<Integer, Integer>> cells = ship.allCells();
         for (Pair<Integer, Integer> p: cells) {
             if (p.getKey() < 1 || p.getKey() > gridSize || p.getValue() < 1 || p.getValue() > gridSize) {
@@ -48,11 +46,21 @@ public abstract class Player implements Saveable {
                 return false;
             }
         }
-        ships.add(ship);
         return true;
     }
 
-    protected boolean tryAddShips(List<Ship> ships) {
+    // MODIFIES: this
+    // EFFECTS: add ship to the ship set
+    public boolean addShip(Ship ship) {
+        if (ableToAddShip(ship)) {
+            ships.add(ship);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean tryAddShips(List<Ship> ships) {
         for (Ship ship: ships) {
             if (!addShip(ship)) {
                 clearShips();

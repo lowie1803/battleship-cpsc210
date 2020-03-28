@@ -75,6 +75,27 @@ public class ConfigPanel extends JPanel {
         g.drawImage(background, 0, 0, null);
         questionLabel.setText(questionString());
         drawDisplay(g);
+
+        drawShipByCurrentSpinnerValue(g);
+    }
+
+    private void drawShipByCurrentSpinnerValue(Graphics g) {
+        Ship ship = new Ship(currentShipSize(), spOrientation.getValue().equals("Horizontal"),
+                (int)((String)spColumn.getValue()).charAt(0) - (int)'0',
+                (int)((String)spRow.getValue()).charAt(0) - (int)'A' + 1);
+        if (currentPlayer().ableToAddShip(ship)) {
+            if (currentPlayer() == game.player1()) {
+                ComponentDrawer.drawShip(g, game.getGridSize(), ship, BOARD_X1, BOARD_Y, ColorSet.SHIP);
+            } else {
+                ComponentDrawer.drawShip(g, game.getGridSize(), ship, BOARD_X2, BOARD_Y, ColorSet.SHIP);
+            }
+        } else {
+            if (currentPlayer() == game.player1()) {
+                ComponentDrawer.drawShip(g, game.getGridSize(), ship, BOARD_X1, BOARD_Y, ColorSet.SHIP_ERROR);
+            } else {
+                ComponentDrawer.drawShip(g, game.getGridSize(), ship, BOARD_X2, BOARD_Y, ColorSet.SHIP_ERROR);
+            }
+        }
     }
 
     private void drawDisplay(Graphics g) {

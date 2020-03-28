@@ -1,4 +1,4 @@
-package ui.mainmenu;
+package ui.menus;
 
 import model.BattleshipGame;
 import settings.AudioSet;
@@ -13,12 +13,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import persistence.Reader;
-import java.util.concurrent.TimeUnit;
 
 import static java.lang.System.exit;
-import static java.lang.System.load;
 
 public class MenuPanel extends JPanel {
+    // TODO: add features to let player choose the size and the ships.
     App app;
     JButton startButton;
     JButton quitButton;
@@ -75,7 +74,7 @@ public class MenuPanel extends JPanel {
         aboutButton.setBackground(ColorSet.BUTTON);
         aboutButton.addActionListener(e -> {
             AudioSet.playButtonClick();
-            //TODO: implement about page
+            app.toAbout();
         });
     }
 
@@ -91,7 +90,7 @@ public class MenuPanel extends JPanel {
     }
 
     private void modifyStartButton() {
-        startButton = new JButton("NEW GAME");
+        startButton = new JButton("New Game");
         startButton.setBounds(150, 350, 300, 50);
         startButton.setFont(Settings.MAIN_FONT);
         startButton.setBackground(Color.WHITE);

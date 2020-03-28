@@ -3,10 +3,11 @@ package settings;
 import java.awt.*;
 
 public class ColorSet {
-    public static final Color BUTTON = new Color(59, 89, 182);
+    public static final Color BUTTON = new Color(200, 200, 200);
     public static final Color BACKGROUND = Color.GRAY;
 
     public static final Color SHIP = Color.ORANGE;
+    public static final Color SHIP_ERROR = new Color(255, 128, 128);
     public static final Color GRID_LINE = Color.WHITE;
     public static final Color GRID_FILL = Color.YELLOW;
 

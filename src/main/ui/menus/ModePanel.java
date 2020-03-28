@@ -1,7 +1,8 @@
-package ui.modemenu;
+package ui.menus;
 
 import model.BattleshipGame;
 import settings.AudioSet;
+import settings.ColorSet;
 import settings.Settings;
 import ui.App;
 
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class ModePanel extends JPanel {
+    // TODO: Add back button
     BattleshipGame game;
     App app;
     BufferedImage background;
@@ -32,6 +34,7 @@ public class ModePanel extends JPanel {
         pvp = new JButton("2 Players");
 
         configureButtons();
+        modifyBackButton();
 
         add(pvp);
         add(pvc);
@@ -57,6 +60,18 @@ public class ModePanel extends JPanel {
             game.reset();
             app.toConfigPanel();
         });
+    }
+
+    private void modifyBackButton() {
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(200, 500, 200, 50);
+        backButton.setFont(Settings.MAIN_FONT);
+        backButton.setBackground(ColorSet.BUTTON);
+        backButton.addActionListener(e -> {
+            AudioSet.playButtonClick();
+            app.toMenu();
+        });
+        add(backButton);
     }
 
     @Override

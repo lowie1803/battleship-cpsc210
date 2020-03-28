@@ -31,19 +31,19 @@ public class HumanPlayer extends Player {
 
     @Override
     public void addAllShips(List<Integer> sizes) {
-        List<Ship> ships = new ArrayList<>(0);
-        for (Integer i: sizes) {
-            ships.add(generateOneShip(i));
-        }
-
-        while (!tryAddShips(ships)) {
-            System.out.println("Conflicted! Please type in the coordinates again!");
-            ships.clear();
-            ships = new ArrayList<>(0);
-            for (Integer i: sizes) {
-                ships.add(generateOneShip(i));
-            }
-        }
+//        List<Ship> ships = new ArrayList<>(0);
+//        for (Integer i: sizes) {
+//            ships.add(generateOneShip(i));
+//        }
+//
+//        while (!tryAddShips(ships)) {
+//            System.out.println("Conflicted! Please type in the coordinates again!");
+//            ships.clear();
+//            ships = new ArrayList<>(0);
+//            for (Integer i: sizes) {
+//                ships.add(generateOneShip(i));
+//            }
+//        }
     }
 
 

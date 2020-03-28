@@ -3,15 +3,21 @@ package ui;
 import model.BattleshipGame;
 import settings.Settings;
 import ui.conclude.ConcludePanel;
-import ui.modemenu.ModePanel;
+import ui.menus.AboutPanel;
+import ui.menus.ModePanel;
 import ui.ingame.GamePanel;
-import ui.mainmenu.MenuPanel;
+import ui.menus.MenuPanel;
 import ui.playerconfig.ConfigPanel;
 import ui.turnfiller.TurnFillerPanel;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+
+import static ui.App.PanelStatus.ABOUT;
 
 public class App extends JFrame {
     private static final int INTERVAL = 20;
@@ -23,12 +29,11 @@ public class App extends JFrame {
     ModePanel modePanel;
     TurnFillerPanel turnFillerPanel;
     ConfigPanel configPanel;
+    AboutPanel aboutPanel;
     boolean loadable = true;
 
     BattleshipGame battleshipGame;
     static PanelStatus panelStatus;
-
-
 
     public App() {
         super("Battleship by low_");
@@ -41,6 +46,12 @@ public class App extends JFrame {
         modePanel = new ModePanel(battleshipGame, this);
         turnFillerPanel = new TurnFillerPanel(battleshipGame, this);
         configPanel = new ConfigPanel(battleshipGame, this);
+        aboutPanel = new AboutPanel(battleshipGame, this);
+//        try {
+//            setIconImage(ImageIO.read(new File(Settings.IMAGE_MENU)));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         setResizable(false);
         add(menuPanel);
         panelStatus = PanelStatus.MENU;
@@ -112,6 +123,12 @@ public class App extends JFrame {
         setPanelStatus(PanelStatus.CONFIG);
     }
 
+    public void toAbout() {
+        setContentPane(aboutPanel);
+        revalidate();
+        setPanelStatus(ABOUT);
+    }
+
     public boolean getLoadable() {
         return loadable;
     }
@@ -121,6 +138,6 @@ public class App extends JFrame {
     }
 
     public enum PanelStatus {
-        MENU, INGAME, CONCLUDE, TURNFILLER, MODE, CONFIG
+        MENU, INGAME, CONCLUDE, TURNFILLER, MODE, CONFIG, ABOUT
     }
 }

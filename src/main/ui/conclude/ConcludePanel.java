@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class ConcludePanel extends JPanel {
+    //TODO: add score display
     private static final int BOARD_X2 = Settings.BOARD_X2;
     private static final int BOARD_X1 = Settings.BOARD_X1;
     private static final int BOARD_Y = Settings.BOARD_Y;
