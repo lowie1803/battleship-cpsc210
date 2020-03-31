@@ -19,7 +19,8 @@ public class ModePanel extends JPanel {
     App app;
     BufferedImage background;
     JButton pvp;
-    JButton pvc;
+    JButton pvce;
+    JButton pvch;
 
     public ModePanel(BattleshipGame game, App app) {
         this.game = game;
@@ -30,26 +31,36 @@ public class ModePanel extends JPanel {
             e.printStackTrace();
         }
         setLayout(null);
-        pvc = new JButton("1 Player");
+        pvce = new JButton("1 Player (Easy)");
+        pvch = new JButton("1 Player (Hard)");
         pvp = new JButton("2 Players");
 
         configureButtons();
         modifyBackButton();
 
         add(pvp);
-        add(pvc);
+        add(pvce);
+        add(pvch);
     }
 
     private void configureButtons() {
-        pvc.setFont(Settings.MAIN_FONT);
+        pvce.setFont(Settings.MAIN_FONT_SMALL);
+        pvch.setFont(Settings.MAIN_FONT_SMALL);
         pvp.setFont(Settings.MAIN_FONT);
 
-        pvc.setBounds(100, 400, 150, 50);
-        pvp.setBounds(350, 400, 150, 50);
+        pvce.setBounds(50, 400, 150, 50);
+        pvch.setBounds(225, 400, 150, 50);
+        pvp.setBounds(400, 400, 150, 50);
 
-        pvc.addActionListener(e -> {
+        pvce.addActionListener(e -> {
             AudioSet.playButtonClick();
             game.setPvCEGameMode();
+            app.toConfigPanel();
+        });
+
+        pvch.addActionListener(e -> {
+            AudioSet.playButtonClick();
+            game.setPvCHGameMode();
             app.toConfigPanel();
         });
 

@@ -85,9 +85,9 @@ public class ConfigPanel extends JPanel {
                 (int)((String)spRow.getValue()).charAt(0) - (int)'A' + 1);
         if (currentPlayer().ableToAddShip(ship)) {
             if (currentPlayer() == game.player1()) {
-                ComponentDrawer.drawShip(g, game.getGridSize(), ship, BOARD_X1, BOARD_Y, ColorSet.SHIP);
+                ComponentDrawer.drawShip(g, game.getGridSize(), ship, BOARD_X1, BOARD_Y, ColorSet.SHIP_LIGHT);
             } else {
-                ComponentDrawer.drawShip(g, game.getGridSize(), ship, BOARD_X2, BOARD_Y, ColorSet.SHIP);
+                ComponentDrawer.drawShip(g, game.getGridSize(), ship, BOARD_X2, BOARD_Y, ColorSet.SHIP_LIGHT);
             }
         } else {
             if (currentPlayer() == game.player1()) {
