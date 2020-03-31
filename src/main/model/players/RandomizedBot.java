@@ -10,19 +10,21 @@ import java.util.Random;
 public class RandomizedBot extends Player {
 
     @Override
-    public void makeAnAttack() {
+    public int makeAnAttack() {
         Random rand = new Random();
         int x = rand.nextInt(opponent.getGridSize()) + 1;
         int y = rand.nextInt(opponent.getGridSize()) + 1;
-        while (attack(x, y) == -1) {
+        int points = attack(x, y);
+        while (points == -1) {
             x = rand.nextInt(opponent.getGridSize()) + 1;
             y = rand.nextInt(opponent.getGridSize()) + 1;
+            points = attack(x, y);
         }
+        return points;
     }
 
     @Override
     public void addAllShips(List<Integer> sizes) {
-//        System.out.println("Number of ships in bot: " + sizes.size());
         List<Ship> ships = new ArrayList<>(0);
         for (Integer i: sizes) {
             ships.add(generateOneShip(i));

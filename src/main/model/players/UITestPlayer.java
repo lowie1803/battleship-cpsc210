@@ -12,8 +12,8 @@ public class UITestPlayer extends Player {
     }
 
     @Override
-    public void makeAnAttack() {
-
+    public int makeAnAttack() {
+        return 0;
     }
 
     @Override

@@ -49,15 +49,13 @@ public class ModePanel extends JPanel {
 
         pvc.addActionListener(e -> {
             AudioSet.playButtonClick();
-            game.setPvCGameMode();
-            game.reset();
+            game.setPvCEGameMode();
             app.toConfigPanel();
         });
 
         pvp.addActionListener(e -> {
             AudioSet.playButtonClick();
             game.setPvPGameMode();
-            game.reset();
             app.toConfigPanel();
         });
     }

@@ -3,6 +3,7 @@ package model;
 import model.players.HumanPlayer;
 import model.players.Player;
 import model.players.RandomizedBot;
+import model.players.SmartBot;
 import persistence.Reader;
 import persistence.Saveable;
 import persistence.Writer;
@@ -17,7 +18,6 @@ import static model.GameMode.*;
 
 
 public class BattleshipGame implements Saveable {
-    // TODO: Change the game so that a player can gain a bonus turn after his/her shot was hit
     private Player[] player = {null, null};
     Settings settings = new Settings();
     private int gridSize;
@@ -34,12 +34,13 @@ public class BattleshipGame implements Saveable {
         if (gameMode == PVP) {
             player[0] = new HumanPlayer();
             player[1] = new HumanPlayer();
-        } else {
+        } else if (gameMode == PVCE) {
             player[0] = new HumanPlayer();
             player[1] = new RandomizedBot();
+        } else {
+            player[0] = new HumanPlayer();
+            player[1] = new SmartBot();
         }
-        player[0].setOpponent(player[1]);
-        player[1].setOpponent(player[0]);
         initialGame();
     }
 
@@ -68,13 +69,21 @@ public class BattleshipGame implements Saveable {
 
         Move ret = currentPlayer().latestMove();
 
-        if (gameMode == PVP) {
-            changeTurn();
-        } else {
-            player2().makeAnAttack();
+        if (ret.getStatus() != Move.Status.HIT) {
+            if (gameMode == PVP) {
+                changeTurn();
+            } else {
+                controlBotAttack(player2());
+            }
         }
         return ret;
+    }
 
+    private void controlBotAttack(Player player) {
+        int points = player.makeAnAttack();
+        while (points > 0) {
+            points = player.makeAnAttack();
+        }
     }
 
     public boolean gameEnded() {
@@ -97,16 +106,17 @@ public class BattleshipGame implements Saveable {
 
     public void setPvPGameMode() {
         this.gameMode = PVP;
-        player[0] = new HumanPlayer();
-        player[1] = new HumanPlayer();
-        initialGame();
+        reset();
     }
 
-    public void setPvCGameMode() {
+    public void setPvCEGameMode() {
         this.gameMode = GameMode.PVCE;
-        player[0] = new HumanPlayer();
-        player[1] = new RandomizedBot();
-        initialGame();
+        reset();
+    }
+
+    public void setPvCHGameMode() {
+        this.gameMode = PVCH;
+        reset();
     }
 
     public void clearSavedGame() {

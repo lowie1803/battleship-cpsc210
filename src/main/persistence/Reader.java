@@ -42,7 +42,7 @@ public class Reader {
             game.setPvPGameMode();
         } else if (lineComponents.get(1).equals("PVCE")) {
 //            System.out.println(lineComponents.get(1));
-            game.setPvCGameMode();
+            game.setPvCEGameMode();
         }
         if (Boolean.parseBoolean(lineComponents.get(2))) {
             game.changeTurn();

@@ -28,7 +28,7 @@ public abstract class Player implements Saveable {
         this.opponent = opponent;
     }
 
-    public abstract void makeAnAttack();
+    public abstract int makeAnAttack();
 
     public abstract void addAllShips(List<Integer> sizes);
 
@@ -177,10 +177,7 @@ public abstract class Player implements Saveable {
         printWriter.print(moves.size());
         printWriter.print(Reader.DELIMITER);
         for (Move i: moves) {
-            printWriter.print(i.getXCoordinate());
-            printWriter.print(Reader.DELIMITER);
-            printWriter.print(i.getYCoordinate());
-            printWriter.print(Reader.DELIMITER);
+            i.save(printWriter);
         }
     }
 
