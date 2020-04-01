@@ -5,6 +5,7 @@ import settings.AudioSet;
 import settings.ColorSet;
 import settings.Settings;
 import ui.App;
+import ui.MenuPanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,62 +14,55 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class ModePanel extends JPanel {
-    // TODO: Add back button
-    BattleshipGame game;
-    App app;
-    BufferedImage background;
-    JButton pvp;
-    JButton pvce;
-    JButton pvch;
+public class ModePanel extends MenuPanel {
 
     public ModePanel(BattleshipGame game, App app) {
-        this.game = game;
-        this.app = app;
-        try {
-            background = ImageIO.read(new File(Settings.IMAGE_MENU));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        setLayout(null);
-        pvce = new JButton("1 Player (Easy)");
-        pvch = new JButton("1 Player (Hard)");
-        pvp = new JButton("2 Players");
-
-        configureButtons();
-        modifyBackButton();
-
-        add(pvp);
-        add(pvce);
-        add(pvch);
+        super(game, app);
+        modifyContents();
     }
 
-    private void configureButtons() {
-        pvce.setFont(Settings.MAIN_FONT_SMALL);
-        pvch.setFont(Settings.MAIN_FONT_SMALL);
+    @Override
+    public void modifyContents() {
+        modifyBackButton();
+        modifyPvPButton();
+        modifyPvCEButton();
+        modifyPvCHButton();
+    }
+
+    private void modifyPvPButton() {
+        JButton pvp = new JButton("2 Players");
         pvp.setFont(Settings.MAIN_FONT);
-
-        pvce.setBounds(50, 400, 150, 50);
-        pvch.setBounds(225, 400, 150, 50);
         pvp.setBounds(400, 400, 150, 50);
-
-        pvce.addActionListener(e -> {
-            AudioSet.playButtonClick();
-            game.setPvCEGameMode();
-            app.toConfigPanel();
-        });
-
-        pvch.addActionListener(e -> {
-            AudioSet.playButtonClick();
-            game.setPvCHGameMode();
-            app.toConfigPanel();
-        });
-
         pvp.addActionListener(e -> {
             AudioSet.playButtonClick();
             game.setPvPGameMode();
             app.toConfigPanel();
         });
+        add(pvp);
+    }
+
+    private void modifyPvCHButton() {
+        JButton pvch = new JButton("1 Player (Hard)");
+        pvch.setFont(Settings.MAIN_FONT_SMALL);
+        pvch.setBounds(225, 400, 150, 50);
+        pvch.addActionListener(e -> {
+            AudioSet.playButtonClick();
+            game.setPvCHGameMode();
+            app.toConfigPanel();
+        });
+        add(pvch);
+    }
+
+    private void modifyPvCEButton() {
+        JButton pvce = new JButton("1 Player (Easy)");
+        pvce.setFont(Settings.MAIN_FONT_SMALL);
+        pvce.setBounds(50, 400, 150, 50);
+        pvce.addActionListener(e -> {
+            AudioSet.playButtonClick();
+            game.setPvCEGameMode();
+            app.toConfigPanel();
+        });
+        add(pvce);
     }
 
     private void modifyBackButton() {
@@ -86,6 +80,5 @@ public class ModePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(background, 0, 0, null);
     }
 }

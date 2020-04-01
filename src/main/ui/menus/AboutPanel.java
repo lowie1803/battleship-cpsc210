@@ -5,6 +5,7 @@ import settings.AudioSet;
 import settings.ColorSet;
 import settings.Settings;
 import ui.App;
+import ui.MenuPanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -15,9 +16,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class AboutPanel extends JPanel {
-    App app;
-    BattleshipGame game;
+public class AboutPanel extends MenuPanel {
     String facebookImg = "data/icon/facebook-icon.png";
     String codeforcesImg = "data/icon/codeforces-icon.png";
     String gmailImg = "data/icon/gmail-icon.png";
@@ -29,14 +28,14 @@ public class AboutPanel extends JPanel {
     String outlookLink = "mailto:daniel.lowie.to@outlook.com";
     String linkedinLink = "https://www.linkedin.com/in/daniel-to-83045a19a/";
 
-    BufferedImage background;
 
     public AboutPanel(BattleshipGame game, App app) {
-        this.app = app;
-        this.game = game;
-        setPreferredSize(new Dimension(Settings.FRAME_WIDTH, Settings.FRAME_HEIGHT));
-        setLayout(null);
+        super(game, app);
+        modifyContents();
+    }
 
+    @Override
+    public void modifyContents() {
         try {
             modifyBackButton();
             modifyText();
@@ -46,12 +45,6 @@ public class AboutPanel extends JPanel {
             modifyHyperlinkButton(outlookLink, outlookImg, 220, 410, false);
             modifyHyperlinkButton(codeforcesLink, codeforcesImg, 320, 410, true);
         } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            background = ImageIO.read(new File(Settings.IMAGE_MENU));
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -64,6 +57,7 @@ public class AboutPanel extends JPanel {
         button.setOpaque(bgr);
         button.setBorderPainted(false);
         button.setBackground(Color.WHITE);
+//        System.out.println(url);
         URI link = new URI(url);
         button.addActionListener(e -> {
             openURL(link);
@@ -106,6 +100,5 @@ public class AboutPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(background, 0, 0, null);
     }
 }

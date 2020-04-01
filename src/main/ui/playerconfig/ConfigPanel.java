@@ -8,29 +8,23 @@ import settings.AudioSet;
 import settings.ColorSet;
 import settings.Settings;
 import ui.App;
+import ui.InGamePanel;
 import ui.drawer.ComponentDrawer;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 import static settings.Settings.*;
 
-public class ConfigPanel extends JPanel {
+public class ConfigPanel extends InGamePanel {
     private static final int SPINNER_HEIGHT = 30;
     private static final int SPINNER_WIDTH = 50;
     private static final String CONFLICT_MESSAGE = "The ship you just add has conflicted body.\nPlease try again!";
-    App app;
-    BattleshipGame game;
 
     JButton addButton;
     JSpinner spOrientation;
     JSpinner spRow;
     JSpinner spColumn;
-    BufferedImage background;
 
     JLabel questionLabel;
     JLabel coordinateLabel;
@@ -39,43 +33,22 @@ public class ConfigPanel extends JPanel {
     int index = 0;
 
     public ConfigPanel(BattleshipGame game, App app) {
-        this.game = game;
-        this.app = app;
-        setBackground(ColorSet.BACKGROUND);
-        setLayout(null);
-        setPreferredSize(new Dimension(Settings.FRAME_WIDTH, Settings.FRAME_HEIGHT));
+        super(game, app);
+        modifyContents();
+    }
 
+    @Override
+    public void modifyContents() {
         modifySpinners();
         modifyButton();
         modifyLabels();
-        addComponents();
-
-        try {
-            background = ImageIO.read(new File(Settings.IMAGE_GAME));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void addComponents() {
-        add(spColumn);
-        add(spRow);
-        add(spOrientation);
-
-        add(addButton);
-
-        add(questionLabel);
-        add(coordinateLabel);
-        add(orientationLabel);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(background, 0, 0, null);
         questionLabel.setText(questionString());
         drawDisplay(g);
-
         drawShipByCurrentSpinnerValue(g);
     }
 
@@ -160,6 +133,10 @@ public class ConfigPanel extends JPanel {
 
         coordinateLabel.setBounds(30, 460, 200, 50);
         orientationLabel.setBounds(270, 460, 200, 50);
+
+        add(questionLabel);
+        add(coordinateLabel);
+        add(orientationLabel);
     }
 
     private String questionString() {
@@ -176,6 +153,7 @@ public class ConfigPanel extends JPanel {
         addButton.setForeground(Color.WHITE);
         addButton.setBackground(ColorSet.BUTTON);
         addButton.addActionListener(e -> buttonAction());
+        add(addButton);
     }
 
     private void modifySpinners() {
@@ -190,6 +168,10 @@ public class ConfigPanel extends JPanel {
         spOrientation = new JSpinner(new SpinnerListModel(orientations));
         spOrientation.setFont(Settings.MAIN_FONT_SMALL);
         spOrientation.setBounds(270, 500, SPINNER_WIDTH * 2, SPINNER_HEIGHT);
+
+        add(spColumn);
+        add(spRow);
+        add(spOrientation);
     }
 
     private String[] generateConsecutiveStringFrom(char c, int len) {

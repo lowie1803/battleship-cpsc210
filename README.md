@@ -54,9 +54,7 @@ game and before you finished the game.
 - You can reload the state of my application by the button "Load game in the main menu". 
 (After you save a game while playing)
 
-Stage 4:
-
-Task 2:
+Phase 4: Task 2:
 
 - I included a type hierachy in my code. In package src/main/model/players. The superclass
 "Player" is inherited by "HumanPlayer", "RandomizedBot" and "SmartBot" (also 
@@ -65,5 +63,7 @@ is chosen into the game after user has chosen a game mode. Specifically: if you 
 1 Player Easy, it will be HumanPlayer vs RandomizedBot, if you choose Hard, it will be 
 HumanPlayer vs SmartBot, and if you choose 2 players, it will be HumanPlayer vs HumanPlayer.
 
-Task 3:
+Phase 4: Task 3:
 
+Problem 1: Most Panels have too similar code. I added BattleshipPanel to lessen the amount
+of coupling.

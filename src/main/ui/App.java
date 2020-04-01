@@ -6,16 +6,13 @@ import ui.conclude.ConcludePanel;
 import ui.menus.AboutPanel;
 import ui.menus.ModePanel;
 import ui.ingame.GamePanel;
-import ui.menus.MenuPanel;
+import ui.menus.MainMenuPanel;
 import ui.playerconfig.ConfigPanel;
 import ui.turnfiller.TurnFillerPanel;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 
 import static ui.App.PanelStatus.ABOUT;
 
@@ -24,7 +21,7 @@ public class App extends JFrame {
     private Settings settings = new Settings();
 
     GamePanel gamePanel;
-    MenuPanel menuPanel;
+    MainMenuPanel mainMenuPanel;
     ConcludePanel concludePanel;
     ModePanel modePanel;
     TurnFillerPanel turnFillerPanel;
@@ -41,7 +38,7 @@ public class App extends JFrame {
 
         battleshipGame = new BattleshipGame();
         gamePanel = new GamePanel(battleshipGame, this);
-        menuPanel = new MenuPanel(battleshipGame, this);
+        mainMenuPanel = new MainMenuPanel(battleshipGame, this);
         concludePanel = new ConcludePanel(battleshipGame, this);
         modePanel = new ModePanel(battleshipGame, this);
         turnFillerPanel = new TurnFillerPanel(battleshipGame, this);
@@ -53,7 +50,7 @@ public class App extends JFrame {
 //            e.printStackTrace();
 //        }
         setResizable(false);
-        add(menuPanel);
+        add(mainMenuPanel);
         panelStatus = PanelStatus.MENU;
         pack();
         setVisible(true);
@@ -67,7 +64,7 @@ public class App extends JFrame {
             public void actionPerformed(ActionEvent ae) {
 //                battleshipGame.update();
                 if (panelStatus == PanelStatus.MENU) {
-                    menuPanel.repaint();
+                    mainMenuPanel.repaint();
                 } else if (panelStatus == PanelStatus.INGAME) {
                     gamePanel.repaint();
                 } else if (panelStatus == PanelStatus.CONFIG) {
@@ -88,7 +85,7 @@ public class App extends JFrame {
     }
 
     public void toMenu() {
-        setContentPane(menuPanel);
+        setContentPane(mainMenuPanel);
         revalidate();
         setPanelStatus(PanelStatus.MENU);
     }

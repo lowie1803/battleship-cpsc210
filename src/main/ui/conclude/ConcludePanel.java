@@ -1,50 +1,33 @@
 package ui.conclude;
 
-import javafx.util.Pair;
 import model.BattleshipGame;
 import model.GameMode;
-import model.players.Player;
-import model.ship.Ship;
 import settings.AudioSet;
-import settings.ColorSet;
 import settings.Settings;
 import ui.App;
+import ui.InGamePanel;
 import ui.drawer.ComponentDrawer;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-public class ConcludePanel extends JPanel {
+public class ConcludePanel extends InGamePanel {
     //TODO: add score display
     private static final int BOARD_X2 = Settings.BOARD_X2;
     private static final int BOARD_X1 = Settings.BOARD_X1;
     private static final int BOARD_Y = Settings.BOARD_Y;
 
-    App app;
-    BattleshipGame game;
-    BufferedImage backgroundImage;
     JButton backToMenu;
 
     JLabel winnerAnnouncer;
 
     public ConcludePanel(BattleshipGame game, App app) {
-        this.app = app;
-        this.game = game;
-        setLayout(null);
-        setBackground(ColorSet.BACKGROUND);
-        setPreferredSize(new Dimension(Settings.FRAME_WIDTH, Settings.FRAME_HEIGHT));
-        try {
-            backgroundImage = ImageIO.read(new File(Settings.IMAGE_GAME));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        super(game, app);
+        modifyContents();
+    }
 
+    @Override
+    public void modifyContents() {
         winnerAnnouncer = new JLabel();
         winnerAnnouncer.setFont(Settings.MAIN_FONT_LARGE);
         winnerAnnouncer.setBounds(220, 380, 400, 80);
@@ -53,13 +36,13 @@ public class ConcludePanel extends JPanel {
         backToMenu = new JButton("Back to Menu");
         backToMenu.setFont(Settings.MAIN_FONT);
         backToMenu.setBounds(200, 450, 200, 50);
-
-        add(winnerAnnouncer);
-        add(backToMenu);
         backToMenu.addActionListener(e -> {
             AudioSet.playButtonClick();
             app.toMenu();
         });
+
+        add(winnerAnnouncer);
+        add(backToMenu);
     }
 
     private String winnerAnnouncement() {
@@ -77,7 +60,6 @@ public class ConcludePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(backgroundImage, 0, 0, null);
         winnerAnnouncer.setText(winnerAnnouncement());
         drawGame(g);
 

@@ -13,39 +13,21 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import persistence.Reader;
+import ui.MenuPanel;
 
 import static java.lang.System.exit;
 
-public class MenuPanel extends JPanel {
+public class MainMenuPanel extends MenuPanel {
     // TODO: add features to let player choose the size and the ships.
-    App app;
     JButton startButton;
     JButton quitButton;
     JButton instructionButton;
     JButton aboutButton;
     JButton loadButton;
-    BattleshipGame game;
 
-    BufferedImage background;
-
-    public MenuPanel(BattleshipGame game, App app) {
-        this.app = app;
-        this.game = game;
-        setBackground(Color.BLACK);
-        setPreferredSize(new Dimension(Settings.FRAME_WIDTH, Settings.FRAME_HEIGHT));
-        setLayout(null);
-
-        modifyStartButton();
-        modifyQuitButton();
-        modifyInstructionButton();
-        modifyAboutButton();
-        modifyLoadButton();
-        addComponents();
-        try {
-            background = ImageIO.read(new File(Settings.IMAGE_MENU));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public MainMenuPanel(BattleshipGame game, App app) {
+        super(game, app);
+        modifyContents();
     }
 
     private void modifyLoadButton() {
@@ -124,9 +106,18 @@ public class MenuPanel extends JPanel {
     }
 
     @Override
+    public void modifyContents() {
+        modifyStartButton();
+        modifyQuitButton();
+        modifyInstructionButton();
+        modifyAboutButton();
+        modifyLoadButton();
+        addComponents();
+    }
+
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(background, 0, 0, null);
         toggleLoad(app.getLoadable());
     }
 }
