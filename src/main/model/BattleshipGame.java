@@ -30,6 +30,8 @@ public class BattleshipGame implements Saveable {
         listOfSizes = new ArrayList<>(settings.defaultSizes);
     }
 
+    // MODIFIES: this, player
+    // EFFECTS: reset and start a new game.
     public void reset() {
         if (gameMode == PVP) {
             player[0] = new HumanPlayer();
@@ -41,18 +43,12 @@ public class BattleshipGame implements Saveable {
             player[0] = new HumanPlayer();
             player[1] = new SmartBot();
         }
-        initialGame();
-    }
-
-    // MODIFIES: this
-    // EFFECTS: initiate a game, including letting players arrange the ships and randomize the arrangement for
-    // the comp.
-    private void initialGame() {
         player[0].setOpponent(player[1]);
         player[1].setOpponent(player[0]);
         turnSwitch = false;
     }
 
+    // EFFECTS: return the player that is taking the next move in the game
     private Player currentPlayer() {
         if (turnSwitch) {
             return player[1];
@@ -61,6 +57,9 @@ public class BattleshipGame implements Saveable {
         }
     }
 
+    // MODIFIES: this, player
+    // EFFECTS: currentPlayer() try to attack opponent on cell (x, y) and then change moves accordingly, either moving
+    // on to the next human player or let the bot do their moves.
     public Move inflictAttack(int x, int y) throws MoveAlreadyTakenException {
         int pts = currentPlayer().attack(x, y);
         if (pts == -1) {
@@ -79,6 +78,8 @@ public class BattleshipGame implements Saveable {
         return ret;
     }
 
+    // MODIFIES: this, player
+    // EFFECTS: control how the Bot plays. Use a loop to continue if the bot successively make moves those hit.
     private void controlBotAttack(Player player) {
         int points = player.makeAnAttack();
         while (points > 0) {
@@ -86,10 +87,12 @@ public class BattleshipGame implements Saveable {
         }
     }
 
+    // EFFECTS: check to see if the game has ended
     public boolean gameEnded() {
         return (player[0].lostGame() || player[1].lostGame());
     }
 
+    // EFFECTS: return "1" if player1() won, "2" if player2() won, "0" otherwise
     public String getWinner() {
         if (player[1].lostGame()) {
             return "1";
@@ -105,20 +108,22 @@ public class BattleshipGame implements Saveable {
     }
 
     public void setPvPGameMode() {
-        this.gameMode = PVP;
+        setGameMode(PVP);
         reset();
     }
 
     public void setPvCEGameMode() {
-        this.gameMode = GameMode.PVCE;
+        setGameMode(PVCE);
         reset();
     }
 
     public void setPvCHGameMode() {
-        this.gameMode = PVCH;
+        setGameMode(PVCH);
         reset();
     }
 
+    // MODIFIES: data/saved.txt
+    // EFFECTS: clear the game data
     public void clearSavedGame() {
         Writer writer;
         try {
@@ -164,8 +169,9 @@ public class BattleshipGame implements Saveable {
     // - first object is int = size of the grids
     // - second object is int denotes the enumeration of the game mode
     // - third object is boolean, denotes whose turn is it currently
-    // - followed by some objects which is the infos of player 1
-    // - followed by some objects which is the infos of player 2
+    // - followed by a group of object which has the information of player 1
+    // - followed by a group of object which has the information of player 2
+    // (see model/players/Player.java for more details)
     public void save(PrintWriter printWriter) {
         printWriter.print(gridSize);
         printWriter.print(Reader.DELIMITER);

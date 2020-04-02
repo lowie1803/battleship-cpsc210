@@ -20,10 +20,11 @@ public abstract class Player implements Saveable {
     public Player() {
         gridSize = Settings.GRID_SIZE;
         ships = new ArrayList<>(0);
-//        points = 0;
         moves = new ArrayList<>(0);
     }
 
+    // MODIFIES: this
+    // EFFECTS: set the opposing Player for this.
     public void setOpponent(Player opponent) {
         this.opponent = opponent;
     }
@@ -34,6 +35,7 @@ public abstract class Player implements Saveable {
 
     public abstract Ship generateOneShip(int size);
 
+    // EFFECTS: check a new ship if it's able to be added to ships without conflicts
     public boolean ableToAddShip(Ship ship) {
         List<Pair<Integer, Integer>> cells = ship.allCells();
         for (Pair<Integer, Integer> p: cells) {
@@ -50,7 +52,7 @@ public abstract class Player implements Saveable {
     }
 
     // MODIFIES: this
-    // EFFECTS: add ship to the ship set
+    // EFFECTS: add ship to the ship set. Return true and add the ship if it's able.
     public boolean addShip(Ship ship) {
         if (ableToAddShip(ship)) {
             ships.add(ship);
@@ -60,22 +62,13 @@ public abstract class Player implements Saveable {
         }
     }
 
-    public boolean tryAddShips(List<Ship> ships) {
-        for (Ship ship: ships) {
-            if (!addShip(ship)) {
-                clearShips();
-                return false;
-            }
-        }
-        return true;
-    }
+
 
     // MODIFIES: this
     // REQUIRES: x in [1, gridSize], y in [1, gridSize]
     // EFFECTS: attack, destroy, and gain point if this has destroy a ship from other player.
     //          return -1 if this move is ineligible, >=0 as the number of point gained.
     public int attack(int x, int y) {
-//        System.out.println("Try attack " + x + " " + y);
         if ((x < 1) || (x > gridSize) || (y < 1) || (y > gridSize)) {
             return -1;
         }
@@ -108,7 +101,7 @@ public abstract class Player implements Saveable {
         return Move.Status.MISS;
     }
 
-    //EFFECTS: return 1 if all ship got destroyed.
+    //EFFECTS: return true if all ship got destroyed.
     public boolean lostGame() {
         for (Ship s: ships) {
             if (!s.isDestroyed()) {
@@ -166,7 +159,11 @@ public abstract class Player implements Saveable {
         return moves;
     }
 
-    // EFFECTS: save data of this player to
+    // EFFECTS: save data of this player to file by the following format:
+    // - A number n denotes the number of ships, followed by n groups of number, each has information for one ship.
+    // (see model/ship/Ship.java for more details)
+    // - Followed by a number m denotes the number of moves already made, followed by n groups of number, each has
+    // information for one move. (see model/Move.java for more details)
     @Override
     public void save(PrintWriter printWriter) {
         printWriter.print(ships.size());

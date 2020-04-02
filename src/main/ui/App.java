@@ -18,7 +18,6 @@ import static ui.App.PanelStatus.ABOUT;
 
 public class App extends JFrame {
     private static final int INTERVAL = 20;
-    private Settings settings = new Settings();
 
     GamePanel gamePanel;
     MainMenuPanel mainMenuPanel;
@@ -44,32 +43,22 @@ public class App extends JFrame {
         turnFillerPanel = new TurnFillerPanel(battleshipGame, this);
         configPanel = new ConfigPanel(battleshipGame, this);
         aboutPanel = new AboutPanel(battleshipGame, this);
-//        try {
-//            setIconImage(ImageIO.read(new File(Settings.IMAGE_MENU)));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         setResizable(false);
         add(mainMenuPanel);
         panelStatus = PanelStatus.MENU;
         pack();
         setVisible(true);
         addTimer();
-//        runApp();
     }
 
     private void addTimer() {
-        Timer t = new Timer(INTERVAL, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-//                battleshipGame.update();
-                if (panelStatus == PanelStatus.MENU) {
-                    mainMenuPanel.repaint();
-                } else if (panelStatus == PanelStatus.INGAME) {
-                    gamePanel.repaint();
-                } else if (panelStatus == PanelStatus.CONFIG) {
-                    configPanel.repaint();
-                }
+        Timer t = new Timer(INTERVAL, ae -> {
+            if (panelStatus == PanelStatus.MENU) {
+                mainMenuPanel.repaint();
+            } else if (panelStatus == PanelStatus.INGAME) {
+                gamePanel.repaint();
+            } else if (panelStatus == PanelStatus.CONFIG) {
+                configPanel.repaint();
             }
         });
 

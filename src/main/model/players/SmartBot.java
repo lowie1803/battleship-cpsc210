@@ -32,6 +32,8 @@ public class SmartBot extends Player {
         hitMoves = new Stack<>();
     }
 
+    // MODIFIES: this, opponent
+    // EFFECTS: generate an attack by looking at previous moves.
     @Override
     public int makeAnAttack() {
         int points = -1;
@@ -56,10 +58,12 @@ public class SmartBot extends Player {
         return points;
     }
 
+    // EFFECTS: use a shuffled stack of moves to see which moves to take next if haven't hit anything
     Pair<Integer, Integer> bestMoveCaseEmpty() {
         return initialMoves.pop();
     }
 
+    // EFFECTS: see the latest 2 moves to determine the next move (to hit the full ship)
     Pair<Integer, Integer> bestMoveCaseConsecutiveHit() {
         Pair<Integer, Integer> p = hitMoves.pop();
         Pair<Integer, Integer> q = hitMoves.peek();
@@ -68,6 +72,7 @@ public class SmartBot extends Player {
         return r;
     }
 
+    // EFFECTS: see the latest move, and then look to 4 cells around and attack all of them.
     int bestMoveCaseOther() {
         int points;
         shuffle(directions);
@@ -82,6 +87,8 @@ public class SmartBot extends Player {
         return -1;
     }
 
+    // EFFECTS: given 2 cells: p, q, determine the cell that is the mirror of p on q. return null if p and q are not
+    // on the same row/column
     Pair<Integer, Integer> next(Pair<Integer, Integer> p, Pair<Integer, Integer> q) {
         if (!p.getKey().equals(q.getKey()) && !p.getValue().equals(q.getValue())) {
             return null;
@@ -93,6 +100,7 @@ public class SmartBot extends Player {
         }
     }
 
+    //EFFECTS: shuffle a list using 7n+1 swaps.
     void shuffle(List list) {
         int size = list.size();
         for (int i = 0; i < 7 * size + 1; i++) {
@@ -104,8 +112,8 @@ public class SmartBot extends Player {
         }
     }
 
-
-
+    // MODIFIES: this
+    // EFFECTS: generate a random set of ships before the game.
     @Override
     public void addAllShips(List<Integer> sizes) {
         List<Ship> ships = new ArrayList<>(0);
@@ -122,6 +130,19 @@ public class SmartBot extends Player {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: try to add a list of
+    public boolean tryAddShips(List<Ship> ships) {
+        for (Ship ship: ships) {
+            if (!addShip(ship)) {
+                clearShips();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // EFFECTS: uses random to generate one ship.
     @Override
     public Ship generateOneShip(int size) {
         Random rand = new Random();

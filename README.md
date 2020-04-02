@@ -58,12 +58,17 @@ Phase 4: Task 2:
 
 - I included a type hierachy in my code. In package src/main/model/players. The superclass
 "Player" is inherited by "HumanPlayer", "RandomizedBot" and "SmartBot" (also 
-"UITestPlayer", but it is not used in main code). Each subclass represents a type of player 
+"UITestPlayer", but it is not used in main code and is deleted). Each subclass represents a type of player 
 is chosen into the game after user has chosen a game mode. Specifically: if you choose 
 1 Player Easy, it will be HumanPlayer vs RandomizedBot, if you choose Hard, it will be 
 HumanPlayer vs SmartBot, and if you choose 2 players, it will be HumanPlayer vs HumanPlayer.
 
 Phase 4: Task 3:
 
-Problem 1: Most Panels have too similar code. I added BattleshipPanel to lessen the amount
-of coupling.
+Problem 1: Most Panels have too similar code. I added BattleshipPanel and MenuPanel to 
+lessen the amount of coupling.
+
+Problem 2: Some codes in model lacks comments on method to show what is going on. I added 
+them
+
+The UML Class Diagram I designed is at data/UML_Design_Diagram.png

@@ -84,6 +84,7 @@ public class Ship implements Saveable {
         return isHorizontal;
     }
 
+    // EFFECTS: return the number of points earned from Ship so far by counting the number of destroyed cells
     public int pointEarnedFromShip() {
         return (100 * destroyed / size);
     }

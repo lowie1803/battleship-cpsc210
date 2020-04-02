@@ -28,6 +28,8 @@ public class Move implements Saveable {
         return status;
     }
 
+    // EFFECTS: save the info of the move by the following format:
+    // x_coordinate, y_coordinate, status of the move.
     @Override
     public void save(PrintWriter printWriter) {
         printWriter.print(xc);

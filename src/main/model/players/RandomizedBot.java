@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Random;
 
 public class RandomizedBot extends Player {
-
+    // MODIFIES: this, opponent
+    // EFFECTS: generate a random attack to opponent's board of ship.
     @Override
     public int makeAnAttack() {
         Random rand = new Random();
@@ -23,6 +24,8 @@ public class RandomizedBot extends Player {
         return points;
     }
 
+    // MODIFIES: this
+    // EFFECTS: generate a random set of ships before the game.
     @Override
     public void addAllShips(List<Integer> sizes) {
         List<Ship> ships = new ArrayList<>(0);
@@ -39,8 +42,20 @@ public class RandomizedBot extends Player {
         }
     }
 
-    @Override
+    // MODIFIES: this
+    // EFFECTS: try to add a list of ship to see if there's any conflicts. Return true if there are no conflicts.
+    public boolean tryAddShips(List<Ship> ships) {
+        for (Ship ship: ships) {
+            if (!addShip(ship)) {
+                clearShips();
+                return false;
+            }
+        }
+        return true;
+    }
+
     // EFFECTS: uses random to generate one ship.
+    @Override
     public Ship generateOneShip(int size) {
         Random rand = new Random();
         boolean horizontal = rand.nextBoolean();

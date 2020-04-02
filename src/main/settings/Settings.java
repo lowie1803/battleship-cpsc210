@@ -18,9 +18,11 @@ public class Settings {
     // PANEL SETTINGS
 
     // FONTS
-    public static final Font MAIN_FONT = new Font("Falstin", Font.BOLD, 20);
-    public static final Font MAIN_FONT_SMALL = new Font("Falstin", Font.BOLD, 14);
-    public static final Font MAIN_FONT_LARGE = new Font("Falstin", Font.BOLD, 30);
+    public static final String FONT_LINK = "data/gamefont.ttf";
+    public static final String FONT_NAME = "Falstin";
+    public static final Font MAIN_FONT = new Font(FONT_NAME, Font.BOLD, 20);
+    public static final Font MAIN_FONT_SMALL = new Font(FONT_NAME, Font.BOLD, 14);
+    public static final Font MAIN_FONT_LARGE = new Font(FONT_NAME, Font.BOLD, 30);
 
 
     // SAVED DATA
