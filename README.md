@@ -12,7 +12,7 @@ this simple, but very brainy and strategic games. In this application, you can:
 - Play with your friend or practice your new, inventive strategy by playing with computer. 
 - Customize the game with way bigger board and way way more battleships than you can ever play on paper.
 - Try our new, customized rules!
-- Kick your friends' asses and become the best in the game.
+- Kick your friends' butts and become the best in the game.
 - Unlock new type of battleships.
 
 But above all, it's free! So why not try to go on the time machine with us to travel back in time and enjoy
